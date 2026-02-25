@@ -299,11 +299,7 @@ function setView(id, el) {
     if(el) el.classList.add('active');
 
     if(id === 'mentor-view') displayMentors();
-
 }
-
-
-
 
 // --- TIC TAC TOE ENGINE ---
 let tttState = ["", "", "", "", "", "", "", "", ""];
@@ -404,10 +400,10 @@ function resetTTT() {
     document.querySelectorAll('.cell').forEach(c => {
         c.innerText = "";
         c.className = "cell";
+    });
+}
 
-
-
-        function updateCredits(amt) {
+function updateCredits(amt) {
     credits = parseInt(credits) + amt;
     localStorage.setItem('neuralCredits', credits);
     
@@ -441,6 +437,3 @@ function endGame(msg, color) {
 // Win: endGame("LINK_SUCCESS // +50 NC", "#00f2ff");
 // Loss: endGame("CORE_ERROR // LINK_SEVERED", "#ff0055");
 // Draw: endGame("DATA_STASIS // NO_WINNER", "#aaa");
-    });
-}
-
