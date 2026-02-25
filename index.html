@@ -122,10 +122,18 @@
 
 <section id="game-view" class="view">
     <div class="game-header">
-        <h1>Neural Tic-Tac-Toe</h1>
+        <h1 class="glitch" data-text="NEURAL_LINK">NEURAL_LINK</h1>
         <div class="game-meta">
-            <span id="game-status">Awaiting Neural Link...</span>
-            <div class="score-pill">Credits: <span id="neural-credits">0</span></div>
+            <div class="status-box">
+                <span class="label">OS_STATUS:</span>
+                <span id="game-status">AWAITING_INPUT...</span>
+            </div>
+            
+            <div class="currency-box">
+                <span class="coin-icon">◈</span>
+                <span id="neural-credits">0000</span>
+                <span class="currency-unit">NC</span>
+            </div>
         </div>
     </div>
 
@@ -146,10 +154,10 @@
     <div class="game-controls">
         <div class="status-indicator">
             <div class="pulse-dot"></div>
-            <span>System: Online</span>
+            <span>Bot_Core: Active</span>
         </div>
         <button class="btn-shine reset-btn" onclick="resetTTT()">
-            REBOOT NEURAL GRID
+            REBOOT_NEURAL_GRID
         </button>
     </div>
 </section>
@@ -160,3 +168,4 @@
 </body>
 
 </html>
+
