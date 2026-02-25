@@ -299,4 +299,110 @@ function setView(id, el) {
     if(el) el.classList.add('active');
 
     if(id === 'mentor-view') displayMentors();
+
+}
+
+
+
+
+// --- TIC TAC TOE ENGINE ---
+let tttState = ["", "", "", "", "", "", "", "", ""];
+let isGameActive = true;
+let userPlayer = "X";
+let aiPlayer = "O";
+let credits = localStorage.getItem('neuralCredits') || 0;
+
+function handleMove(index) {
+    const cells = document.querySelectorAll('.cell');
+    if (tttState[index] !== "" || !isGameActive) return;
+
+    // Player Move
+    executeMove(index, userPlayer);
+    
+    if (checkWinner(userPlayer)) {
+        endGame("Victory! +50 Credits");
+        updateCredits(50);
+    } else if (tttState.includes("")) {
+        // AI Turn
+        setTimeout(aiThink, 600);
+    } else {
+        endGame("Equilibrium Reached (Draw)");
+    }
+}
+
+function executeMove(index, player) {
+    tttState[index] = player;
+    const cells = document.querySelectorAll('.cell');
+    cells[index].innerText = player;
+    cells[index].classList.add('taken', player.toLowerCase());
+}
+
+function aiThink() {
+    if (!isGameActive) return;
+    let available = tttState.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+    let move = available[Math.floor(Math.random() * available.length)];
+    
+    executeMove(move, aiPlayer);
+    
+    if (checkWinner(aiPlayer)) {
+        endGame("AI Override: Link Severed.");
+    }
+}
+
+function checkWinner(p) {
+    const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    return wins.some(cond => cond.every(idx => tttState[idx] === p));
+}
+
+function endGame(msg) {
+    isGameActive = false;
+    document.getElementById('game-status').innerText = msg;
+}
+
+function updateCredits(amt) {
+    credits = parseInt(credits) + amt;
+    localStorage.setItem('neuralCredits', credits);
+    document.getElementById('neural-credits').innerText = credits;
+}
+
+function resetTTT() {
+    tttState = ["", "", "", "", "", "", "", "", ""];
+    isGameActive = true;
+    document.getElementById('game-status').innerText = "Your Turn (X)";
+    document.querySelectorAll('.cell').forEach(c => {
+        c.innerText = "";
+        c.className = "cell";
+    });
+}
+
+// --- FIXING THE NAVIGATION FLOW ---
+function setView(id, el) {
+    // Hide all
+    document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+    // Show target
+    document.getElementById(id).style.display = 'block';
+    
+    // Sidebar highlight
+    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    if(el) el.classList.add('active');
+
+    // Run specific logic per view
+    if(id === 'game-view') resetTTT();
+    if(id === 'mentor-view') displayMentors();
+}
+
+
+function resetTTT() {
+    tttState = ["", "", "", "", "", "", "", "", ""];
+    isGameActive = true;
+    
+    // Reset status and visuals
+    const statusEl = document.getElementById('game-status');
+    statusEl.innerText = "Your Turn (X)";
+    statusEl.style.color = "white"; // Reset color if it changed on win/loss
+
+    document.querySelectorAll('.cell').forEach(c => {
+        c.innerText = "";
+        c.className = "cell";
+    });
 }
