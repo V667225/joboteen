@@ -1029,3 +1029,59 @@ main {
     letter-spacing: 1px;
     font-weight: bold;
 }
+
+/* Status Box Customization */
+.status-box {
+    background: rgba(0, 242, 255, 0.05);
+    padding: 10px 20px;
+    border-left: 3px solid var(--accent);
+    font-family: 'Courier New', monospace;
+}
+
+.status-box .label {
+    color: var(--accent);
+    font-size: 0.7rem;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+#game-status {
+    color: #fff;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Credits / Currency Customization */
+.currency-box {
+    background: linear-gradient(90deg, #7000ff33, #00f2ff33);
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.coin-icon {
+    color: var(--accent);
+    animation: rotate 3s linear infinite;
+}
+
+#neural-credits {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.currency-unit {
+    font-size: 0.6rem;
+    color: var(--accent);
+    vertical-align: top;
+}
+
+@keyframes rotate {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+}
