@@ -910,7 +910,6 @@ main {
 @keyframes slideIn {
     from { transform: translateX(100%); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
-
 }
 
 .ttt-grid {
@@ -1085,6 +1084,8 @@ main {
     from { transform: rotateY(0deg); }
     to { transform: rotateY(360deg); }
 }
+
+
 
 /* Secure Modal Overlay */
 #booking-form {
