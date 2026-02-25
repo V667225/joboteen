@@ -404,5 +404,43 @@ function resetTTT() {
     document.querySelectorAll('.cell').forEach(c => {
         c.innerText = "";
         c.className = "cell";
+
+
+
+        function updateCredits(amt) {
+    credits = parseInt(credits) + amt;
+    localStorage.setItem('neuralCredits', credits);
+    
+    // Formats numbers to look like 0050 instead of 50
+    document.getElementById('neural-credits').innerText = credits.toString().padStart(4, '0');
+}
+
+function resetTTT() {
+    tttState = ["", "", "", "", "", "", "", "", ""];
+    isGameActive = true;
+    
+    // Customized turn message
+    const statusEl = document.getElementById('game-status');
+    statusEl.innerText = "USER_TURN_PROMPT >";
+    statusEl.style.color = "#fff";
+
+    document.querySelectorAll('.cell').forEach(c => {
+        c.innerText = "";
+        c.className = "cell";
     });
 }
+
+function endGame(msg, color) {
+    isGameActive = false;
+    const statusEl = document.getElementById('game-status');
+    statusEl.innerText = msg;
+    statusEl.style.color = color;
+}
+
+// In your handleMove or checkWinner, use these strings:
+// Win: endGame("LINK_SUCCESS // +50 NC", "#00f2ff");
+// Loss: endGame("CORE_ERROR // LINK_SEVERED", "#ff0055");
+// Draw: endGame("DATA_STASIS // NO_WINNER", "#aaa");
+    });
+}
+
