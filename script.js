@@ -539,3 +539,126 @@ function submitRequest() {
     closeBooking();
     document.getElementById('problem-desc').value = ""; // Clear form
 }
+
+
+
+
+
+// ==========================================
+// NOVEL SYSTEM ENGINE
+// ==========================================
+
+const novels = {
+    anxiety: {
+        title: "The Invisible Spotlight",
+        startNode: "intro",
+        nodes: {
+            intro: {
+                text: "Monday morning. Your history presentation is in two hours. Your heart is hammering like a trapped bird. Everyone seems to be judging you. Do you hide in the library to skip it, or try a breathing technique?",
+                choices: [
+                    { text: "Hide in the Library", next: "hide_path" },
+                    { text: "Try Breathing Technique", next: "face_fear" }
+                ]
+            },
+            hide_path: {
+                text: "The library is quiet, but the guilt is heavy. You have a failing grade now. You see classmates laughing outside and feel more alone. Is this safety, or just a cage?",
+                choices: [{ text: "Restart Simulation", next: "intro" }]
+            },
+            face_fear: {
+                text: "You walk in. Your hands shake. You stumble on the first slide. Do you rush to finish, or pause and take a sip of water?",
+                choices: [
+                    { text: "Rush to Finish", next: "rush_end" },
+                    { text: "Pause & Drink Water", next: "brave_path" }
+                ]
+            },
+            brave_path: {
+                text: "You take a breath. The silence is long, but you continue. You finished! Maya walks up: 'I get nervous too. You did great.' Courage is a muscle.",
+                choices: [{ text: "End Simulation", next: "intro" }]
+            },
+            rush_end: {
+                text: "You finished so fast nobody understood you. But hey, it's over. Next time, try to own your space.",
+                choices: [{ text: "Restart Simulation", next: "intro" }]
+            }
+        }
+    },
+    pressure: {
+        title: "Echoes of the Crowd",
+        startNode: "intro",
+        nodes: {
+            intro: {
+                text: "The 'cool' group is jumping off the high ledge at the quarry. It's dark and dangerous. Someone hands you a drink you don't recognize. 'Don't be a glitch,' they sneer. Do you take it?",
+                choices: [
+                    { text: "Take the Drink", next: "bad_vibe" },
+                    { text: "Refuse: 'I'm good'", next: "stand_ground" }
+                ]
+            },
+            stand_ground: {
+                text: "They tease you, but then move on. You feel a sense of power in your own 'No.' Suddenly, someone slips near the edge! Do you call for help or try to grab them?",
+                choices: [
+                    { text: "Call for Help (Adults)", next: "hero_path" },
+                    { text: "Try to Grab Them", next: "risk_path" }
+                ]
+            },
+            hero_path: {
+                text: "The paramedics arrive. Everyone is safe. They respect your clear head. Leadership is knowing when to say No.",
+                choices: [{ text: "End Simulation", next: "intro" }]
+            },
+            bad_vibe: {
+                text: "The drink makes you dizzy. You lose your balance and almost fall. This isn't friendship; it's a hazard.",
+                choices: [{ text: "Restart Simulation", next: "intro" }]
+            }
+        }
+    }
+};
+
+function openNovel(key) {
+    const reader = document.getElementById('novel-reader');
+    const content = document.getElementById('reader-content');
+    
+    if (!reader || !content) {
+        console.error("Critical Error: Reader elements not found in HTML.");
+        return;
+    }
+
+    reader.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Lock background scroll
+    renderNode(key, novels[key].startNode);
+    
+    // Using your existing notify system
+    if (typeof notify === 'function') notify(`SYNCING_STORY: ${novels[key].title}`);
+}
+
+function renderNode(novelKey, nodeKey) {
+    const node = novels[novelKey].nodes[nodeKey];
+    const container = document.getElementById('reader-content');
+    const title = document.getElementById('reader-title');
+    
+    if (!node) return;
+
+    title.innerText = novels[novelKey].title;
+    
+    // Injecting the text and a new choice box
+    container.innerHTML = `<p class="story-text animate-text" style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 30px;">${node.text}</p>`;
+    
+    const choiceBox = document.createElement('div');
+    choiceBox.className = "choice-container";
+    choiceBox.style.display = "flex";
+    choiceBox.style.flexDirection = "column";
+    choiceBox.style.gap = "10px";
+    
+    node.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = "btn-shine small-btn";
+        btn.style.width = "100%";
+        btn.innerText = choice.text;
+        btn.onclick = () => renderNode(novelKey, choice.next);
+        choiceBox.appendChild(btn);
+    });
+
+    container.appendChild(choiceBox);
+}
+
+function closeNovel() {
+    document.getElementById('novel-reader').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
