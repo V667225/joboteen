@@ -44,6 +44,11 @@
         <div class="nav-item" onclick="setView('game-view', this)">
             <span class="nav-icon">🎮</span><span class="nav-text">Funtabu Hub</span>
         </div>
+
+        <div class="nav-item" onclick="setView('novel-view')">
+              <span class="nav-icon">📚</span>
+              <span class="nav-text">Mind Library</span>
+         </div>
     </div>
 
     <div style="padding: 20px;">
@@ -124,8 +129,16 @@
             </section>
 
 <section id="game-view" class="view">
+
+
+<div id="novel-reader" class="glass-card secret-form" style="display:none; width: 80%; height: 80vh; overflow-y: auto;">
+    <div class="close-vault" onclick="closeNovel()">✕</div>
+    <h1 id="reader-title" class="highlight"></h1>
+    <div id="reader-content" class="reader-body"></div>
+</div>
+
     <div class="game-header">
-        <h1 class="glitch" data-text="NEURAL_LINK">NEURAL_LINK</h1>
+        <h1 class="glitch" data-text="NEURAL_LINK">NEURAL LINK</h1>
         <div class="game-meta">
             <div class="status-box">
                 <span class="label">OS_STATUS:</span>
@@ -164,6 +177,55 @@
         </button>
     </div>
 </section>
+
+<section id="novel-view" class="view" style="display:none;">
+    <div class="view-header">
+        <h1 class="highlight">Mind  Library</h1>
+        <p class="subtitle">Interactive simulations addressing real-world challenges.</p>
+    </div>
+
+    <div class="novel-grid">
+        <div class="novel-card glass-card">
+            <div class="novel-cover social-anxiety">
+                <span class="status-chip">Mental Health</span>
+            </div>
+            <div class="novel-info">
+                <h3>The Invisible Spotlight</h3>
+                <p>Navigate a high-stakes school presentation while managing social anxiety.</p>
+                <button class="btn-shine small-btn" onclick="openNovel('anxiety')">START SIMULATION</button>
+            </div>
+        </div>
+
+        <div class="novel-card glass-card">
+            <div class="novel-cover peer-pressure">
+                <span class="status-chip">Life Choices</span>
+            </div>
+            <div class="novel-info">
+                <h3>Echoes of the Crowd</h3>
+                <p>Your friends are making a dangerous choice. Do you follow or find your own path?</p>
+                <button class="btn-shine small-btn" onclick="openNovel('pressure')">START SIMULATION</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="novel-reader" class="glass-card secret-form" style="display:none;">
+        <div class="close-vault" onclick="closeNovel()">✕</div>
+        <div id="reader-header">
+            <h2 id="reader-title" class="highlight"></h2>
+            <div id="progress-bar"><div id="progress-fill"></div></div>
+        </div>
+        <div id="reader-content"></div>
+    </div>
+</section>
+
+<div id="novel-reader" class="glass-card" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; height: 80vh; z-index: 5000; padding: 40px; overflow-y: auto; background: rgba(5, 5, 5, 0.95); border: 2px solid var(--accent);">
+    <div class="close-vault" onclick="closeNovel()" style="float: right; cursor: pointer; font-size: 1.5rem; color: var(--accent);">✕</div>
+    <h2 id="reader-title" class="highlight" style="margin-bottom: 20px;"></h2>
+    <hr style="border: 0; border-top: 1px solid rgba(0, 242, 255, 0.2); margin-bottom: 20px;">
+    <div id="reader-content"></div>
+</div>
+
+
         </main>
     </div>
 
