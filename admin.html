@@ -2,166 +2,233 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Joboteen Admin | Command Center</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joboteen Guide </title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Admin-specific overrides */
-        .admin-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-        .request-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid var(--accent); }
-        .status-badge { float: right; font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; background: var(--primary); }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
-<body class="admin-body">
+<body>
 
-    <div id="main-app" style="display: flex;">
-        <aside class="sidebar">
-            <h2 class="sidebar-logo">ADMIN.MODE</h2>
-<aside class="sidebar" id="admin-sidebar">
-    <div class="collapse-btn" onclick="toggleSidebar()"></div>
+    <div id="login-screen">
+        <div class="login-box">
+            <h1 class="logo-text">JoboTeen</h1>
+            <p class="subtitle">Global Guidance Organization</p>
+            <div class="input-group">
+                <input type="text" id="reg-name" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address">
+                <input type="password" placeholder="Create Password">
+            </div>
+            <button class="btn-shine" onclick="launchPlatform()">Initialize Account</button>
+        </div>
+    </div>
+
+    <div id="main-app">
+<aside class="sidebar" id="main-sidebar">
+    <div class="collapse-btn" onclick="toggleSidebar()">◀</div>
     
     <div class="sidebar-logo">
-        <span class="logo-icon">A.</span><span>CONTROL</span>
+        <span class="logo-icon">J.</span><span>G-TEEN</span>
     </div>
 
-<div class="nav-group">
-    <div class="nav-label">Command Center</div>
-    <div class="nav-item active" onclick="setAdminView('overview', this)">
-        <span class="nav-icon">📊</span><span class="nav-text">Dashboard</span>
+    <div class="nav-group">
+        <div class="nav-label">Main Menu</div>
+        <div class="nav-item active" onclick="setView('profile-view', this)">
+            <span class="nav-icon">👤</span><span class="nav-text">Life Story</span>
+        </div>
+        <div class="nav-item" onclick="setView('edu-view', this)">
+            <span class="nav-icon">📚</span><span class="nav-text">Education</span>
+        </div>
+        <div class="nav-item" onclick="setView('mentor-view', this)">
+            <span class="nav-icon">🤝</span><span class="nav-text">Find Mentor</span>
+        </div>
+        <div class="nav-item" onclick="setView('game-view', this)">
+            <span class="nav-icon">🎮</span><span class="nav-text">Funtabu Hub</span>
+        </div>
+
+        <div class="nav-item" onclick="setView('novel-view')">
+              <span class="nav-icon">📚</span>
+              <span class="nav-text">Mind Library</span>
+         </div>
     </div>
-    <div class="nav-item" onclick="setAdminView('mentor-mgmt', this)">
-        <span class="nav-icon">📋</span><span class="nav-text">Mentors List</span>
-    </div>
-    <div class="nav-item" onclick="setAdminView('inbox', this)">
-        <span class="nav-icon">📥</span><span class="nav-text">Inbox</span>
-    </div>
-    <div class="nav-item" onclick="setAdminView('broadcast', this)">
-        <span class="nav-icon">📡</span><span class="nav-text">Broadcast</span>
-    </div>
-</div>
 
     <div style="padding: 20px;">
-        <button class="btn-shine" style="width: 100%;" onclick="location.href='index.html'">🔙 Back to User</button>
+        <button class="btn-shine" style="width: 100%;" onclick="location.href='admin.html'">⚙️ Admin</button>
     </div>
 </aside>
-            <button class="btn-shine" onclick="window.location.href='index.html'">Back to User Site</button>
-        </aside>
 
         <main class="content">
-<section id="overview" class="view active-view">
-    <h1 class="terminal-title">Platform Statistics</h1>
-    
-    <div class="stats-grid">
-        <div class="stat-card glass-card">
-            <div class="stat-icon">👥</div>
-            <div class="stat-data">
-                <span class="stat-num counter">1,042</span>
-                <span class="stat-label">Total Teens</span>
-            </div>
-            <div class="stat-trend">+12% this week</div>
-        </div>
+            <section id="profile-view" class="view active-view">
+                <h1>Welcome, <span id="user-display" class="highlight">Teenager</span></h1>
+        <div class="story-container">
+                 <h3>My Life Story</h3>
+                    <div class="textarea-wrapper">
+                       <textarea id="life-story-input" 
+                        placeholder="Share your journey, your dreams, or the challenges you've overcome..."
+                         oninput="updateCount()"></textarea>
+                         <div class="textarea-glow"></div>
+                    </div>
+    <div class="story-footer">
+        <span class="char-count"><span id="current-chars">0</span> characters</span>
+        <button class="btn-shine small-btn" onclick="saveStory()">Save to Profile</button>
+    </div>
+</div>
+            </section>
 
-        <div class="stat-card glass-card">
-            <div class="stat-icon">👨‍🏫</div>
-            <div class="stat-data">
-                <span class="stat-num">15</span>
-                <span class="stat-label">Active Mentors</span>
-            </div>
-            <div class="stat-trend pulse-cyan">All Systems Nominal</div>
-        </div>
 
-        <div class="stat-card glass-card">
-            <div class="stat-icon">📡</div>
-            <div class="stat-data">
-                <span class="stat-num live-glow">312</span>
-                <span class="stat-label">Live Today</span>
-            </div>
-            <div class="stat-trend">Real-time Feed</div>
+
+
+            <section id="mentor-view" class="view">
+    <div class="view-header">
+        <h1>Connect with a Mentor</h1>
+        <p>Your privacy is our priority. Share what's on your mind with a certified guide.</p>
+    </div>
+
+    <div class="mentor-grid">
+        <div class="mentor-card glass-card">
+            <div class="mentor-pic" style="background: url('https://via.placeholder.com/80')"></div>
+            <h3>Mentor Ambani</h3>
+            <span class="specialty">Adolescent Growth</span>
+            <button class="btn-shine small" onclick="openBooking('Ambani')">Book Session</button>
+        </div>
+        
+        <div class="mentor-card glass-card">
+            <div class="mentor-pic" style="background: url('https://via.placeholder.com/80')"></div>
+            <h3>Mentor Vina</h3>
+            <span class="specialty">Career & Mindset</span>
+            <button class="btn-shine small" onclick="openBooking('Vina')">Book Session</button>
         </div>
     </div>
 
-    <div class="glass-card" style="margin-top: 30px;">
-        <h3>Active Mentors List</h3>
-        <div id="admin-mentor-list">No mentors registered yet.</div>
-    </div>
-</section>
-
-
-<section id="mentor-mgmt" class="view">
-    <div class="login-card glass-card" style="max-width: 450px; margin: 0 auto; padding: 40px;">
-        <h2 style="color: var(--accent); margin-top: 0;">Register New Mentor</h2>
-        <p style="color: #64748b; margin-bottom: 30px;">Enter professional credentials below.</p>
-
-        <div class="photo-upload-container" onclick="document.getElementById('m-file').click()">
-            <div id="photo-preview" class="photo-preview-box">
-                <span>Click to Upload Photo</span>
-            </div>
-            <input type="file" id="m-file" accept="image/*" style="display: none;" onchange="previewImage(this)">
+    <div id="booking-form" class="glass-card secret-form">
+        <h2 id="booking-title">Share with your Mentor</h2>
+        <div class="input-group">
+            <label>The Problem / Challenge</label>
+            <textarea id="problem-desc" placeholder="Describe what you are going through..."></textarea>
         </div>
+        <div class="input-group">
+            <label>Urgency Level</label>
+            <select id="urgency">
+                <option value="low">Just need a talk</option>
+                <option value="medium">Feeling stressed</option>
+                <option value="high">Urgent Support Needed</option>
+            </select>
 
- <div class="input-field">
-    <input type="text" id="m-name" required>
-    <label>Full Name</label>
-</div>
-
-<div class="input-field">
-    <input type="text" id="m-edu" required>
-    <label>Level of Education</label>
-</div>
-
-<div class="input-field">
-    <input type="number" id="m-age" required>
-    <label>Age</label>
-</div>
-        <button class="btn-shine" onclick="registerMentor()" style="margin-top: 20px;">Deploy Mentor to Platform</button>
+            <div class="close-vault" onclick="closeBooking()">✕</div>
+              <h2 id="booking-title">Share with your Mentor</h2>
+            </div>
+        <button class="btn-shine" onclick="submitRequest()">Send to Mentor Privately</button>
     </div>
 </section>
 
-<div class="glass-card" style="margin-top: 20px;">
-    <h3>Active Mentors List</h3>
-    <div id="admin-mentor-list">
-        </div>
-</div>
-
-            <section id="inbox" class="view">
-                <h1>Incoming Guidance Requests</h1>
-                <div id="admin-request-list">
-                    <p style="color: #555;">Waiting for new requests...</p>
+            <section id="gnc-view" class="view">
+                <h1>Mentorship Gallery</h1>
+                <div class="video-grid">
+                    <div class="video-item">Ambani: Adolescent Growth</div>
+                    <div class="video-item">David Goggins: Mental Toughness</div>
                 </div>
             </section>
 
-<section id="broadcast" class="view">
-    <div class="command-center glass-card">
-        <h1 class="terminal-title">Satellite Broadcast</h1>
-        <p class="terminal-subtitle">Global transmission to all active devices.</p>
+<section id="game-view" class="view">
 
-        <div class="control-group">
-            <label class="control-label">Transmission Content</label>
-            <div class="terminal-input-wrapper">
-                <textarea id="broadcast-msg" placeholder="Type global message here..."></textarea>
-                <div class="scan-line"></div>
+
+<div id="novel-reader" class="glass-card secret-form" style="display:none; width: 80%; height: 80vh; overflow-y: auto;">
+    <div class="close-vault" onclick="closeNovel()">✕</div>
+    <h1 id="reader-title" class="highlight"></h1>
+    <div id="reader-content" class="reader-body"></div>
+</div>
+
+    <div class="game-header">
+        <h1 class="glitch" data-text="NEURAL_LINK">NEURAL LINK</h1>
+        <div class="game-meta">
+            <div class="status-box">
+                <span class="label">OS_STATUS:</span>
+                <span id="game-status">AWAITING_INPUT...</span>
+            </div>
+            
+            <div class="currency-box">
+                <span class="coin-icon">◈</span>
+                <span id="neural-credits">0000</span>
+                <span class="currency-unit">NC</span>
             </div>
         </div>
+    </div>
 
-        <div class="control-group">
-            <label class="control-label">Signal Priority</label>
-            <div class="custom-select-wrapper">
-                <select id="broadcast-type">
-                    <option value="info">STANDARD SIGNAL (CYAN)</option>
-                    <option value="urgent">URGENT OVERRIDE (PURPLE)</option>
-                    <option value="emergency">CRITICAL PRIORITY (RED)</option>
-                </select>
-                <span class="select-arrow">▼</span>
-            </div>
+    <div class="ttt-container">
+        <div class="ttt-grid" id="ttt-board">
+            <div class="cell" onclick="handleMove(0)"></div>
+            <div class="cell" onclick="handleMove(1)"></div>
+            <div class="cell" onclick="handleMove(2)"></div>
+            <div class="cell" onclick="handleMove(3)"></div>
+            <div class="cell" onclick="handleMove(4)"></div>
+            <div class="cell" onclick="handleMove(5)"></div>
+            <div class="cell" onclick="handleMove(6)"></div>
+            <div class="cell" onclick="handleMove(7)"></div>
+            <div class="cell" onclick="handleMove(8)"></div>
         </div>
+    </div>
 
-        <button class="btn-shine broadcast-btn" onclick="sendGlobalAlert()">
-            <span class="btn-icon">📡</span> EXECUTE BROADCAST
+    <div class="game-controls">
+        <div class="status-indicator">
+            <div class="pulse-dot"></div>
+            <span>Bot_Core: Active</span>
+        </div>
+        <button class="btn-shine reset-btn" onclick="resetTTT()">
+            REBOOT_NEURAL_GRID
         </button>
     </div>
 </section>
+
+<section id="novel-view" class="view" style="display:none;">
+    <div class="view-header">
+        <h1 class="highlight">Mind  Library</h1>
+        <p class="subtitle">Interactive simulations addressing real-world challenges.</p>
+    </div>
+
+    <div class="novel-grid">
+        <div class="novel-card glass-card">
+            <div class="novel-cover social-anxiety">
+                <span class="status-chip">Mental Health</span>
+            </div>
+            <div class="novel-info">
+                <h3>The Invisible Spotlight</h3>
+                <p>Navigate a high-stakes school presentation while managing social anxiety.</p>
+                <button class="btn-shine small-btn" onclick="openNovel('anxiety')">START SIMULATION</button>
+            </div>
+        </div>
+
+        <div class="novel-card glass-card">
+            <div class="novel-cover peer-pressure">
+                <span class="status-chip">Life Choices</span>
+            </div>
+            <div class="novel-info">
+                <h3>Echoes of the Crowd</h3>
+                <p>Your friends are making a dangerous choice. Do you follow or find your own path?</p>
+                <button class="btn-shine small-btn" onclick="openNovel('pressure')">START SIMULATION</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="novel-reader" class="glass-card secret-form" style="display:none;">
+        <div class="close-vault" onclick="closeNovel()">✕</div>
+        <div id="reader-header">
+            <h2 id="reader-title" class="highlight"></h2>
+            <div id="progress-bar"><div id="progress-fill"></div></div>
+        </div>
+        <div id="reader-content"></div>
+    </div>
+</section>
+
+<div id="novel-reader" class="glass-card" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; height: 80vh; z-index: 5000; padding: 40px; overflow-y: auto; background: rgba(5, 5, 5, 0.95); border: 2px solid var(--accent);">
+    <div class="close-vault" onclick="closeNovel()" style="float: right; cursor: pointer; font-size: 1.5rem; color: var(--accent);">✕</div>
+    <h2 id="reader-title" class="highlight" style="margin-bottom: 20px;"></h2>
+    <hr style="border: 0; border-top: 1px solid rgba(0, 242, 255, 0.2); margin-bottom: 20px;">
+    <div id="reader-content"></div>
+</div>
+
+
         </main>
     </div>
 
-    <script src="admin-logic.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
