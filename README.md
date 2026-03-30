@@ -1,48 +1,48 @@
-# 🌟 Teen Guidance Hub 🌟
+# 🌌 J.G-TEEN | The Neural Mind Library
+> **A high-fidelity interactive simulation platform designed to build resilience, empathy, and courage in the modern operative.**
 
-![Website Banner](https://via.placeholder.com/800x200?text=Teen+Guidance+Hub)  
+![Header Image](https://capsule-render.vercel.app/render?type=soft&color=auto&height=200&section=header&text=J.G-TEEN&fontSize=70&animation=fadeIn&fontAlignY=38&desc=Interactive%20Simulation%20Archives&descAlignY=62&descSize=20)
 
-A **fun, engaging, and inspiring website for teens**, filled with **stories, advice, and guidance** to help navigate challenges, build confidence, and discover hidden strengths.  
-
----
-
-## 🚀 Features
-
-- **Inspiring Stories:** Realistic, humorous, and moral-packed stories for teens  
-- **Life Lessons:** Each story has clear takeaways for personal growth  
-- **Fun & Engaging:** Humor, relatable scenarios, and interactive storytelling  
-- **Accessible Design:** Mobile-friendly, responsive, and teen-friendly UI  
-- **Community Focused:** Encourages empathy, courage, and self-expression  
+## ⚡ The Mission
+J.G-TEEN is a vibrant, web-based experience that gamifies emotional intelligence. Through a "Netflix-style" interface, users access the **Mind Library**—a collection of 30+ interactive stories where choices determine the outcome of the simulation.
 
 ---
 
-## 📖 Story Highlights
-
-1. **The Dreamer Who Didn’t Give Up** – Follow Amira and her tutu-wearing dragon on a journey of persistence and self-belief.  
-2. **The Robot That Glitched** – Daniel learns that failure is just a step toward success.  
-3. **Silent Witness** – Jaden discovers the power of courage and standing up for others.  
-4. **The Power of Kindness** – Jamal shows how small acts can create big change.  
-5. **Hidden Strengths** – Leah turns weaknesses into opportunities for self-discovery.  
-6. **Finding Your Voice** – Sophie overcomes fear and learns the power of self-expression.  
-7. **Coping With Stress** – Aisha navigates pressure, anxiety, and mental well-being.  
-8. **The Park Project** – Ethan learns how small actions lead to meaningful change.  
-
-> Each story is designed to **entertain, teach, and inspire teens** in a relatable and fun way.  
+## 🛠️ Tech Stack
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | HTML5, Modern CSS3 (Grid & Flexbox) |
+| **Logic** | Vanilla JavaScript (ES6+) |
+| **Animations** | CSS 3D Transforms & Keyframes |
+| **Icons** | FontAwesome / BoxIcons |
 
 ---
 
-## 🛠️ Technologies Used
+## 🚀 Core Features
 
-- **HTML5 & CSS3** – Vibrant, responsive design  
-- **JavaScript** – Interactive elements and story effects  
-- **Vanta.js** – Animated backgrounds for a modern look  
-- **Google Fonts** – Teen-friendly typography  
-- **Git & GitHub** – Version control and collaboration  
+### 📚 Netflix-Style Mind Library
+- **3D Flip Cards:** Hover over any story to reveal the "Dossier View" and basic intel.
+- **Dynamic Reader:** Click to open a full-screen, scrollable reading card with smooth fade-in effects.
+- **Deep Content:** Each story contains multiple paragraphs of narrative depth.
+
+### 🧠 Neural Feedback System
+- **Star Ratings:** Users can rate simulations based on their impact.
+- **Intel Feed:** A live comment section for users to leave reflections on their choices.
+- **XP Progression:** (In Development) Earn experience points for completing difficult moral simulations.
+
+### 🎨 Vibrant UI/UX
+- **Glassmorphism:** Modern "frosted glass" cards and overlays.
+- **Cyber-Glow:** Accent colors (Cyan, Neon Purple, Emerald) to distinguish story categories like *Perseverance* and *Empathy*.
 
 ---
 
-## 🌈 Installation
+## 📸 Interface Preview
+*Insert a screenshot of your Netflix Grid here*
+> **Note:** The interface features a fixed sidebar for seamless navigation between "My Profile," "Education," and the "Mind Library."
 
-1. Clone the repository  
-```bash
-git clone (https://v667225.github.io/joboteen/)
+---
+
+## 🛠️ Installation & Setup
+1. **Clone the Archive:**
+   ```bash
+   git clone (https://v667225.github.io/joboteen/)
