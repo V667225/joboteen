@@ -9,8 +9,19 @@ function launchPlatform() {
     document.getElementById('user-display').innerText = nameInput.value;
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('main-app').style.display = 'flex';
+    renderMindLibrary();
 }
-
+function launchPlatform() {
+    const nameInput = document.getElementById('reg-name');
+    if(nameInput.value.trim() === "") {
+        alert("Enter your name to start!");
+        return;
+    }
+    
+    // Switch the screens
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('main-app').style.display = 'flex';
+}
 // NAVIGATION ENGINE
 function toggleMenu(id) {
     const menu = document.getElementById(id);
@@ -24,6 +35,14 @@ function setView(viewId) {
         v.style.display = 'none';
     });
     
+    // Update active state in sidebar
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        if(item.getAttribute('onclick').includes(viewId)) {
+            item.classList.add('active');
+        }
+    });
+
     // Show selected view
     const activeView = document.getElementById(viewId);
     activeView.style.display = 'block';
@@ -549,83 +568,93 @@ function submitRequest() {
 // ==========================================
 
 const novels = {
-    anxiety: {
-        title: "The Invisible Spotlight",
-        startNode: "intro",
+    'dreamer': {
+        title: "The Dreamer",
+        description: "Amira's art is being mocked. Will she quit?",
+        category: "PERSEVERANCE",
+        color: "#ff00ff",
+        xp: "+500 XP",
+        startNode: 'start',
         nodes: {
-            intro: {
-                text: "Monday morning. Your history presentation is in two hours. Your heart is hammering like a trapped bird. Everyone seems to be judging you. Do you hide in the library to skip it, or try a breathing technique?",
-                choices: [
-                    { text: "Hide in the Library", next: "hide_path" },
-                    { text: "Try Breathing Technique", next: "face_fear" }
-                ]
-            },
-            hide_path: {
-                text: "The library is quiet, but the guilt is heavy. You have a failing grade now. You see classmates laughing outside and feel more alone. Is this safety, or just a cage?",
-                choices: [{ text: "Restart Simulation", next: "intro" }]
-            },
-            face_fear: {
-                text: "You walk in. Your hands shake. You stumble on the first slide. Do you rush to finish, or pause and take a sip of water?",
-                choices: [
-                    { text: "Rush to Finish", next: "rush_end" },
-                    { text: "Pause & Drink Water", next: "brave_path" }
-                ]
-            },
-            brave_path: {
-                text: "You take a breath. The silence is long, but you continue. You finished! Maya walks up: 'I get nervous too. You did great.' Courage is a muscle.",
-                choices: [{ text: "End Simulation", next: "intro" }]
-            },
-            rush_end: {
-                text: "You finished so fast nobody understood you. But hey, it's over. Next time, try to own your space.",
-                choices: [{ text: "Restart Simulation", next: "intro" }]
-            }
+            'start': { text: "Friends laugh at your art. 'Waste of time!' they say.", choices: [{ text: "Keep Drawing", nextNode: 'win' }, { text: "Quit", nextNode: 'lose' }] },
+            'win': { text: "You became a pro! THE END.", choices: [] },
+            'lose': { text: "You gave up on your talent. THE END.", choices: [] }
         }
     },
-    pressure: {
-        title: "Echoes of the Crowd",
-        startNode: "intro",
+    'robot': {
+        title: "Robot Failure",
+        description: "Daniel's robot exploded. Now what?",
+        category: "RESILIENCE",
+        color: "#00f2ff",
+        xp: "+600 XP",
+        startNode: 'start',
         nodes: {
-            intro: {
-                text: "The 'cool' group is jumping off the high ledge at the quarry. It's dark and dangerous. Someone hands you a drink you don't recognize. 'Don't be a glitch,' they sneer. Do you take it?",
-                choices: [
-                    { text: "Take the Drink", next: "bad_vibe" },
-                    { text: "Refuse: 'I'm good'", next: "stand_ground" }
-                ]
-            },
-            stand_ground: {
-                text: "They tease you, but then move on. You feel a sense of power in your own 'No.' Suddenly, someone slips near the edge! Do you call for help or try to grab them?",
-                choices: [
-                    { text: "Call for Help (Adults)", next: "hero_path" },
-                    { text: "Try to Grab Them", next: "risk_path" }
-                ]
-            },
-            hero_path: {
-                text: "The paramedics arrive. Everyone is safe. They respect your clear head. Leadership is knowing when to say No.",
-                choices: [{ text: "End Simulation", next: "intro" }]
-            },
-            bad_vibe: {
-                text: "The drink makes you dizzy. You lose your balance and almost fall. This isn't friendship; it's a hazard.",
-                choices: [{ text: "Restart Simulation", next: "intro" }]
-            }
+            'start': { text: "The robot is sparking on the floor. Judges are watching.", choices: [{ text: "Fix it", nextNode: 'win' }, { text: "Cry", nextNode: 'lose' }] },
+            'win': { text: "You won the trophy! THE END.", choices: [] },
+            'lose': { text: "You left in shame. THE END.", choices: [] }
         }
     }
 };
 
-function openNovel(key) {
-    const reader = document.getElementById('novel-reader');
-    const content = document.getElementById('reader-content');
-    
-    if (!reader || !content) {
-        console.error("Critical Error: Reader elements not found in HTML.");
+function openNovel(storyKey) {
+    const story = novels[storyKey];
+    const modal = document.getElementById('novel-modal');
+    const container = document.getElementById('novel-reader-content');
+
+    if (!story || !modal) return;
+
+    // Show the modal
+    modal.style.display = 'flex';
+
+    // Start the story at the 'start' node
+    renderNode(storyKey, story.startNode);
+}
+
+function renderNode(storyKey, nodeKey) {
+    const story = novels[storyKey];
+    const node = story.nodes[nodeKey];
+    const container = document.getElementById('novel-reader-content');
+
+    if (!node || !container) {
+        console.error("Missing node or container!");
         return;
     }
 
-    reader.style.display = 'block';
-    document.body.style.overflow = 'hidden'; // Lock background scroll
-    renderNode(key, novels[key].startNode);
+    // 1. Create the Title and Story Text
+    let html = `
+        <h2 style="color: var(--accent); margin-bottom: 10px;">${story.title}</h2>
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
+        <p class="terminal-text" style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">
+            ${node.text}
+        </p>
+    `;
+
+    // 2. Create the Choice Buttons
+    html += `<div class="choice-stack" style="display: flex; flex-direction: column; gap: 12px;">`;
     
-    // Using your existing notify system
-    if (typeof notify === 'function') notify(`SYNCING_STORY: ${novels[key].title}`);
+    if (node.choices.length > 0) {
+        node.choices.forEach(choice => {
+            html += `
+                <button class="btn-shine" onclick="renderNode('${storyKey}', '${choice.nextNode}')">
+                    ${choice.text}
+                </button>`;
+        });
+    } else {
+        // If the story is over
+        html += `
+            <p style="color: #888; font-style: italic;">--- End of Simulation ---</p>
+            <button class="btn-shine" onclick="closeNovel()" style="background: var(--primary);">
+                RETURN TO LIBRARY
+            </button>`;
+    }
+
+    html += `</div>`;
+
+    // 3. Paste it into the modal
+    container.innerHTML = html;
+}
+function closeNovel() {
+    document.getElementById('novel-modal').style.display = 'none';
 }
 
 function renderNode(novelKey, nodeKey) {
@@ -661,4 +690,203 @@ function renderNode(novelKey, nodeKey) {
 function closeNovel() {
     document.getElementById('novel-reader').style.display = 'none';
     document.body.style.overflow = 'auto';
+}
+
+function startCareerSim() {
+    const interest = prompt("Identify interest sector (e.g., TECH, BIO, DESIGN):");
+    if (interest) {
+        // Utilizing your existing notification system style
+        alert(`ACCESSING_ARCHIVES... Generating ${interest.toUpperCase()} career roadmap.`);
+        console.log(`Career simulation started for: ${interest}`);
+    }
+}
+
+function startCareerSim() {
+    const btn = event.target;
+    const originalText = btn.innerText;
+    
+    // Visual feedback
+    btn.innerText = "BYPASSING FIREWALL...";
+    btn.style.background = "#ff0055";
+    
+    setTimeout(() => {
+        const choice = prompt("ENTER TARGET SECTOR: (e.g. CYBERSECURITY, DIGITAL_ART, NEUROSCIENCE)");
+        if(choice) {
+            notify(`UPLINK_ESTABLISHED: Mapping ${choice.toUpperCase()} trajectory...`);
+            // Here you could later redirect or show a modal with results
+        }
+        btn.innerText = originalText;
+        btn.style.background = "";
+    }, 1200);
+}
+
+function updateProfilePicture(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('profile-display').innerHTML = `<img src="${e.target.result}">`;
+            localStorage.setItem('userAvatar', e.target.result);
+            notify("IMAGE_UPLOADED: Identity confirmed.");
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function saveFullProfile() {
+    const story = document.getElementById('life-story-input').value;
+    const bio = document.getElementById('user-bio').value;
+    const loc = document.getElementById('user-location').value;
+
+    const profileData = { story, bio, loc };
+    localStorage.setItem('userProfileData', JSON.stringify(profileData));
+    
+    notify("DATA_SYNCED: Profile archive updated.");
+}
+
+// Update the launchPlatform to also fill in the profile name
+const originalLaunch = launchPlatform;
+launchPlatform = function() {
+    originalLaunch();
+    const name = document.getElementById('reg-name').value;
+    document.getElementById('display-name-profile').innerText = name.toUpperCase();
+    
+    // Load existing data
+    const saved = JSON.parse(localStorage.getItem('userProfileData'));
+    if(saved) {
+        document.getElementById('life-story-input').value = saved.story || "";
+        document.getElementById('user-bio').value = saved.bio || "";
+        document.getElementById('user-location').value = saved.loc || "";
+    }
+    const avatar = localStorage.getItem('userAvatar');
+    if(avatar) document.getElementById('profile-display').innerHTML = `<img src="${avatar}">`;
+};
+
+function saveFullProfile() {
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    
+    // Change button to "Uploading" state
+    btn.innerHTML = "UPLOADING DATA...";
+    btn.style.opacity = "0.7";
+
+    const story = document.getElementById('life-story-input').value;
+    const bio = document.getElementById('user-bio').value;
+    const loc = document.getElementById('user-location').value;
+
+    const profileData = { story, bio, loc };
+    localStorage.setItem('userProfileData', JSON.stringify(profileData));
+    
+    // Artificial delay for "Coolness"
+    setTimeout(() => {
+        btn.innerHTML = "DATA ARCHIVED ✓";
+        btn.style.color = "#00ff88"; // Success green
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.color = "";
+            btn.style.opacity = "1";
+        }, 2000);
+        
+        notify("PROFILE_SYNC: Archive successfully updated.");
+    }, 800);
+}
+
+function renderMindLibrary() {
+    console.log("Attempting to render library..."); // Check your console for this!
+    const grid = document.querySelector('.novel-grid');
+    
+    if (!grid) {
+        console.error("HTML Error: .novel-grid not found!");
+        return;
+    }
+    
+    grid.innerHTML = ""; 
+
+    Object.keys(novels).forEach(key => {
+        const story = novels[key];
+        const card = document.createElement('div');
+        card.className = "glass-card novel-card";
+        card.style.borderTop = `4px solid ${story.color}`;
+        
+        card.innerHTML = `
+            <div class="novel-info">
+                <span class="status-chip" style="color:${story.color}">${story.category}</span>
+                <h3 style="margin:10px 0">${story.title}</h3>
+                <p style="font-size:0.8rem; color:#bbb; margin-bottom:15px">${story.description}</p>
+                <button class="btn-shine small-btn" onclick="openNovel('${key}')">START STORY</button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+    console.log("Library Render Complete.");
+}
+
+// This forces the library to render as soon as the script loads
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof novels !== 'undefined') {
+        renderMindLibrary();
+    }
+});
+
+// This runs the moment the page loads
+window.onload = () => {
+    renderMindLibrary();
+};
+document.querySelectorAll('.read-more-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+        // Prevent the card from flipping back when clicking the button
+        e.stopPropagation(); 
+        
+        const storyTitle = button.parentElement.querySelector('h4').innerText;
+        const storyText = button.parentElement.querySelector('p').innerText;
+        
+        alert(`ACCESSING ARCHIVE: ${storyTitle}\n\n${storyText}\n\nRemember: Your choices define your journey.`);
+    });
+});
+
+function openStory(title, category, fullText) {
+    document.getElementById('reader-title').innerText = title;
+    document.getElementById('reader-category').innerText = category;
+    document.getElementById('reader-text').innerText = fullText;
+    
+    document.getElementById('story-reader-overlay').style.display = 'flex';
+    document.getElementById('comment-list').innerHTML = ""; // Reset comments for new story
+}
+
+function closeStory() {
+    document.getElementById('story-reader-overlay').style.display = 'none';
+}
+
+function postComment() {
+    const input = document.getElementById('comment-input');
+    if(input.value.trim() === "") return;
+    
+    const list = document.getElementById('comment-list');
+    const newComment = document.createElement('div');
+    newComment.style.marginBottom = "10px";
+    newComment.innerHTML = `<b style="color:var(--accent)">YOU:</b> ${input.value}`;
+    list.prepend(newComment);
+    input.value = "";
+}
+
+function rate(stars) {
+    notify(`Rating of ${stars} stars saved to neural link.`);
+}
+
+function openStoryFromCard(button) {
+    // 1. Find the card this button belongs to
+    const cardBack = button.parentElement;
+    
+    // 2. Grab the info from the HTML elements
+    const title = cardBack.querySelector('h4').innerText;
+    const category = cardBack.parentElement.querySelector('.badge').innerText;
+    const fullText = cardBack.querySelector('.full-story-metadata').innerHTML;
+
+    // 3. Send it to the Reader Modal
+    document.getElementById('reader-title').innerText = title;
+    document.getElementById('reader-category').innerText = category;
+    document.getElementById('reader-text').innerHTML = fullText;
+    
+    // 4. Show the Modal
+    document.getElementById('story-reader-overlay').style.display = 'flex';
 }
