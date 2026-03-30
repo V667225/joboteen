@@ -32,8 +32,12 @@
 
     <div class="nav-group">
         <div class="nav-label">Main Menu</div>
-        <div class="nav-item active" onclick="setView('profile-view', this)">
-            <span class="nav-icon">👤</span><span class="nav-text">Life Story</span>
+     <div class="nav-item" onclick="setView('profile-view')">
+        <span class="nav-icon">👤</span>
+        <span class="nav-text">My Profile</span>
+     </div>
+        <div class="nav-item" onclick="setView('edu-view', this)">
+            <span class="nav-icon">📚</span><span class="nav-text">Education</span>
         </div>
         <div class="nav-item" onclick="setView('mentor-view', this)">
             <span class="nav-icon">🤝</span><span class="nav-text">Find Mentor</span>
@@ -42,39 +46,146 @@
             <span class="nav-icon">🎮</span><span class="nav-text">Funtabu Hub</span>
         </div>
 
-        <div class="nav-item" onclick="setView('novel-view')">
-              <span class="nav-icon">📚</span>
-              <span class="nav-text">Mind Library</span>
-         </div>
+<div class="nav-item" onclick="setView('mind-library'); renderMindLibrary();">
+    <span class="nav-icon">📚</span>
+    <span class="nav-text">Mind Library</span>
+</div>
     </div>
 
     <div style="padding: 20px;">
         <button class="btn-shine" style="width: 100%;" onclick="location.href='admin.html'">⚙️ Admin</button>
     </div>
 </aside>
-
-        <main class="content">
-            <section id="profile-view" class="view active-view">
-                <h1>Welcome, <span id="user-display" class="highlight">Teenager</span></h1>
-        <div class="story-container">
-                 <h3>My Life Story</h3>
-                    <div class="textarea-wrapper">
-                       <textarea id="life-story-input" 
-                        placeholder="Share your journey, your dreams, or the challenges you've overcome..."
-                         oninput="updateCount()"></textarea>
-                         <div class="textarea-glow"></div>
-                    </div>
-    <div class="story-footer">
-        <span class="char-count"><span id="current-chars">0</span> characters</span>
-        <button class="btn-shine small-btn" onclick="saveStory()">Save to Profile</button>
+   <main class="content">
+<section id="profile-view" class="view" style="display:none;">
+    <div class="view-header">
+        <h1 class="highlight">Operative Profile</h1>
+        <p class="subtitle">Manage your digital identity and archive your journey.</p>
     </div>
-</div>
-            </section>
+
+    <div class="profile-container">
+        <div class="glass-card profile-sidebar">
+            <div class="avatar-upload-zone" onclick="document.getElementById('profile-file').click()">
+                <input type="file" id="profile-file" hidden onchange="updateProfilePicture(this)">
+                <div id="profile-display" class="profile-pic-large">
+                    <span class="upload-label">UPLOAD PHOTO</span>
+                </div>
+            </div>
+            <h2 id="display-name-profile" class="user-name-tag">OPERATIVE_NAME</h2>
+            <div class="profile-stats">
+                <div class="p-stat"><span>RANK</span> <strong>NOVICE</strong></div>
+                <div class="p-stat"><span>XP</span> <strong>1,250</strong></div>
+            </div>
+            <button class="btn-shine small-btn" onclick="saveFullProfile()">SYNC TO CLOUD</button>
+        </div>
+
+        <div class="glass-card story-editor">
+            <h3>My Life Story</h3>
+            <p class="terminal-text" style="font-size: 0.8rem; margin-bottom: 10px;">> ARCHIVE_LOG_01</p>
+            <textarea id="life-story-input" placeholder="Document your journey, challenges, and victories here..."></textarea>
+            
+            <div class="profile-details-grid">
+                <div class="input-group">
+                    <label>Designation (Bio)</label>
+                    <input type="text" id="user-bio" placeholder="e.g. Aspiring Tech Lead">
+                </div>
+                <div class="input-group">
+                    <label>Location</label>
+                    <input type="text" id="user-location" placeholder="Global Sector">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="edu-view" class="view" style="display:none;">
+    <div class="view-header">
+        <h1 class="highlight-glitch" data-text="KNOWLEDGE_UPLINK">KNOWLEDGE_UPLINK</h1>
+        <p class="terminal-text">Upgrade your operative profile with global credentials.</p>
+    </div>
+
+    <div class="edu-flex-container">
+        <div class="glass-card big-card career-hero">
+            <div class="card-badge">RANK: ELITE</div>
+            <div class="hero-content">
+                <h2>Pathfinder Protocol</h2>
+                <p>Don't just pick a job. Simulate a future. Our neural engine maps your skills to high-impact global careers.</p>
+                <button class="pulse-btn" onclick="startCareerSim()">INITIALIZE SIMULATION</button>
+            </div>
+            <div class="visual-deco">
+                <div class="circle-ring"></div>
+            </div>
+        </div>
+
+        <div class="edu-grid">
+            <div class="glass-card quest-card">
+                <div class="quest-header">
+                    <span class="category">FUNDING</span>
+                    <span class="xp">+5000 XP</span>
+                </div>
+                <h3>Global Bounties</h3>
+                <p>Secure the bag. International scholarships currently accepting applications.</p>
+                <div class="bounty-list">
+                    <div class="bounty-item"><span>◈</span> Chevening 2026 <span class="status-live">LIVE</span></div>
+                    <div class="bounty-item"><span>◈</span> Erasmus+ Intel <span class="status-live">LIVE</span></div>
+                </div>
+            </div>
+
+            <div class="glass-card quest-card">
+                <div class="quest-header">
+                    <span class="category">STRENGTH</span>
+                    <span class="xp">MODULAR</span>
+                </div>
+                <h3>Skill Tree</h3>
+                <div class="skill-progress">
+                    <div class="skill-tag">Python <div class="p-bar"><div class="fill" style="width:70%"></div></div></div>
+                    <div class="skill-tag">Design <div class="p-bar"><div class="fill" style="width:40%"></div></div></div>
+                </div>
+                <button class="btn-outline">VIEW ALL MODULES</button>
+            </div>
+        </div>
+    </div>
+
+      <div class="view-header">
+        <h1 class="highlight">Intel & Education</h1>
+        <p class="subtitle">Global resources and interactive pathways for the next generation.</p>
+    </div>
+
+    <div class="edu-grid">
+        <div class="glass-card edu-card">
+            <div class="edu-icon">🎓</div>
+            <h3>Scholarship Uplinks</h3>
+            <p>Access global funding for international universities and specialized research.</p>
+            <ul class="edu-list">
+                <li><a href="#" class="edu-link">◈ Chevening Global Fellowship</a></li>
+                <li><a href="#" class="edu-link">◈ Erasmus+ Exchange Program</a></li>
+                <li><a href="#" class="edu-link">◈ Mastercard Foundation Scholars</a></li>
+            </ul>
+        </div>
+
+        <div class="glass-card edu-card">
+            <div class="edu-icon">🚀</div>
+            <h3>Career Pathing</h3>
+            <p>Interactive roadmaps for high-impact sectors including Tech, Arts, and Engineering.</p>
+            <div class="textarea-wrapper" style="margin-top: 15px;">
+                <button class="btn-shine small-btn" style="width: 100%;" onclick="startCareerSim()">INITIALIZE CAREER SIMULATOR</button>
+            </div>
+        </div>
+
+        <div class="glass-card edu-card">
+            <div class="edu-icon">🛠️</div>
+            <h3>Certified Skillsets</h3>
+            <p>Industry-recognized certifications to upgrade your operative profile.</p>
+            <div class="course-tags">
+                <span class="tag">Python_Core</span>
+                <span class="tag">UX_Design</span>
+                <span class="tag">Neural_Lead</span>
+            </div>
+            <a href="#" class="view-all">Browse Full Directory →</a>
+        </div>
+</section>
 
 
-
-
-            <section id="mentor-view" class="view">
+<section id="mentor-view" class="view">
     <div class="view-header">
         <h1>Connect with a Mentor</h1>
         <p>Your privacy is our priority. Share what's on your mind with a certified guide.</p>
@@ -90,7 +201,7 @@
         
         <div class="mentor-card glass-card">
             <div class="mentor-pic" style="background: url('https://via.placeholder.com/80')"></div>
-            <h3>Mentor Vina</h3>
+            <h3>Mentor Vince</h3>
             <span class="specialty">Career & Mindset</span>
             <button class="btn-shine small" onclick="openBooking('Vina')">Book Session</button>
         </div>
@@ -117,13 +228,13 @@
     </div>
 </section>
 
-            <section id="gnc-view" class="view">
+<section id="gnc-view" class="view">
                 <h1>Mentorship Gallery</h1>
                 <div class="video-grid">
                     <div class="video-item">Ambani: Adolescent Growth</div>
                     <div class="video-item">David Goggins: Mental Toughness</div>
                 </div>
-            </section>
+</section>
 
 <section id="game-view" class="view">
 
@@ -175,44 +286,229 @@
     </div>
 </section>
 
-<section id="novel-view" class="view" style="display:none;">
+<section id="mind-library" class="view" style="display:none;">
     <div class="view-header">
-        <h1 class="highlight">Mind  Library</h1>
-        <p class="subtitle">Interactive simulations addressing real-world challenges.</p>
+        <h1 class="highlight">Mind Library</h1>
+        <p class="subtitle">Select a simulation to begin your mental training.</p>
     </div>
 
-    <div class="novel-grid">
-        <div class="novel-card glass-card">
-            <div class="novel-cover social-anxiety">
-                <span class="status-chip">Mental Health</span>
-            </div>
-            <div class="novel-info">
-                <h3>The Invisible Spotlight</h3>
-                <p>Navigate a high-stakes school presentation while managing social anxiety.</p>
-                <button class="btn-shine small-btn" onclick="openNovel('anxiety')">START SIMULATION</button>
+    <div class="netflix-grid">
+        
+<div class="story-card">
+    <div class="story-inner">
+        <div class="story-front dreamer-bg">
+            <span class="badge">PERSEVERANCE</span>
+            <h3>The Dreamer</h3>
+        </div>
+        <div class="story-back">
+            <h4>The Dreamer's Path</h4>
+            <p>Amira's art is mocked. She must choose her path.</p>
+            
+<div class="full-story-metadata" style="display: none;">
+    <h1>The Dreamer Who Didn’t Give Up</h1>
+    <p>Theme: Perseverance, self-belief, and following your passion</p>
+    Amira had always been obsessed with drawing. Her notebooks were bursting with sketches—superheroes with capes too big for their bodies, dragons with silly expressions, and landscapes where mountains looked like giant mashed potatoes. Sometimes, her pencil would squeak across the page so fast she swore the drawings were alive.
+    <br><br>
+    But school was a battlefield for Amira’s passion. Every time she pulled out her sketchbook, her classmates would nudge each other and whisper, “Here comes the artist… again!” One day, during lunch, her best friend, Leah, accidentally spilled juice on Amira’s newest sketch—a dragon wearing sunglasses and a tutu.
+    <br><br>
+    “Ah! My masterpiece!” Amira shrieked dramatically, flapping her arms like the dragon itself had come to life. The whole cafeteria burst into laughter. Amira wanted to hide under the table, but instead, she took a deep breath and declared, “You all will regret mocking this dragon one day!”
+    <br><br>
+    Despite the teasing, Amira couldn’t stop drawing. She sketched during breaks, stayed up late perfecting her shading, and even created a tiny comic series starring a cat detective who solved mysteries with a pencil. But her parents were skeptical. “Amira,” her dad said, raising one eyebrow, “maybe you should focus on something more… practical. Like accounting. Or rocket science. Or, I don’t know, selling lemonade?”
+    <br><br>
+    Amira nodded politely, then whispered to her dragon sketch, “Don’t worry, buddy. We’ll prove them wrong.” And prove them wrong she did. She joined online art communities, where she met other teens who drew dragons, superheroes, and even dancing teapots. They shared tips, encouragement, and occasionally memes about dragons stealing tacos—Amira’s personal favorite.
+    <br><br>
+    Months passed. She submitted her work to a local magazine competition, laughing nervously at the idea of a dragon in a tutu appearing in print. When the magazine called her, Amira nearly dropped her pencil. “We love your style! Can we feature your illustrations?”
+    <br><br>
+    On the day the magazine arrived, Amira sat on her bed and opened it. There, in full color, was her dragon—with sunglasses and tutu—staring confidently at the readers. Amira laughed until tears ran down her cheeks. The same classmates who once teased her were stunned.
+    <br><br>
+    Amira learned several things along the way: that passion matters more than ridicule, that humor can lighten even the toughest moments, and that persistence—combined with a little creativity—can turn dreams into reality. She also discovered that dragons, whether in tutu or not, can inspire courage, laughter, and belief in yourself.
+</div>
+
+            <button class="read-more-btn" onclick="openStoryFromCard(this)">READ FULL STORY</button>
+        </div>
+    </div>
+</div>
+        <div class="story-card">
+            <div class="story-inner">
+                <div class="story-front robot-bg">
+                    <span class="badge">RESILIENCE</span>
+                    <h3>Robot Failure</h3>
+                </div>
+                <div class="story-back">
+                    <h4>The Robot Glitch</h4>
+                    <p>When Daniel's robot explodes in front of the judges, he learns that failure is just a lesson in disguise.</p>
+                 <div class="full-story-metadata" style="display: none;">
+    Daniel was obsessed with robots. Not just any robots, but robots that could do things humans were too lazy to do. He dreamed of building a robot that could clean the classroom while students were busy playing or napping.
+For weeks, Daniel worked tirelessly in his tiny garage-cum-lab. He glued wires, soldered circuits, and programmed lines of code that looked like alien language to anyone else. He named his robot “Sweepatron 3000” and imagined it rolling across the floor, picking up eraser shavings and snack crumbs while teachers gawked in admiration.
+    <br><br>
+    Finally, the day of the school science competition arrived. Daniel wheeled in Sweepatron 3000, and a crowd gathered, whispering and laughing at the robot’s unusual design. It had googly eyes and a broom taped to one side, looking like a cross between a cartoon character and a vacuum cleaner.
+“Watch this!” Daniel announced confidently. He pressed the big red button. The robot whirred… and then shot straight into the wall, spinning in circles like it had suddenly developed a personality crisis. Bits of chalk dust flew everywhere. The audience gasped. Some students stifled laughter; others nearly fell off their chairs.
+    <br><br>
+    Daniel’s heart sank. “No, no, no!” he muttered, frantically pressing buttons. Sweepatron 3000 began spinning even faster, knocking over a stack of textbooks. The teacher sighed, half amused, half exasperated.
+Instead of giving up or hiding in a corner, Daniel took a deep breath. He studied what went wrong: “Ah, too much torque on the left motor… wrong calibration… maybe it just hates me,” he muttered, scratching his head. He carefully made adjustments, rewired a few circuits, and reprogrammed the logic.
+    <br><br>
+    Weeks later, Daniel entered another competition. This time, Sweepatron 3000 moved gracefully across the floor, scooping up crumbs and even avoiding chairs like a tiny mechanical ninja. The audience erupted in applause. Daniel didn’t just win the competition; he also learned a priceless lesson: failure isn’t defeat—it’s a chance to learn, grow, and improve.
+And of course, he never forgot to give Sweepatron 3000 googly eyes—because even robots need character.
+</div>
+
+       <button class="read-more-btn" onclick="openStoryFromCard(this)">READ FULL STORY</button>
+                </div>
             </div>
         </div>
 
-        <div class="novel-card glass-card">
-            <div class="novel-cover peer-pressure">
-                <span class="status-chip">Life Choices</span>
-            </div>
-            <div class="novel-info">
-                <h3>Echoes of the Crowd</h3>
-                <p>Your friends are making a dangerous choice. Do you follow or find your own path?</p>
-                <button class="btn-shine small-btn" onclick="openNovel('pressure')">START SIMULATION</button>
-            </div>
-        </div>
-    </div>
+        <div class="story-card">
+            <div class="story-inner">
+                <div class="story-front bullying-bg">
+                    <span class="badge">COURAGE</span>
+                    <h3>Silent Witness</h3>
+                </div>
+                <div class="story-back">
+                    <h4>Standing Up</h4>
+                    <p>Jaden sees a friend being bullied. He faces the ultimate choice: stay safe in the shadows or speak up.</p>
+                  <div class="full-story-metadata" style="display: none;">
+   Jaden had always noticed it. There was a kid in his class—Tariq—who seemed to shrink every time the bigger kids walked by. Books would fall from his hands, lunches would get stolen, and sometimes someone would whisper a mean joke right in his ear. And every time, the rest of the class… stayed silent.
+At first, Jaden did nothing. He told himself, “Better stay invisible. If I get involved, they might pick on me too.” But every day, Tariq’s lunchbox would vanish, and his eyes would glimmer with silent sadness. It started to feel like the kid was fading away in front of everyone.
+    <br><br>
+   One Friday, things escalated. A group of bullies cornered Tariq in the hallway, and one of them tried to shove him into a trash can. Jaden’s stomach twisted. He wanted to stay invisible—but his brain yelled louder: “You can’t just watch!”
+Jaden marched forward, trying to act braver than he felt. “Hey! Back off!” he shouted, flapping his arms like a superhero attempting flight. The bullies turned, shocked to see someone daring to challenge them.
+“You think you’re so smart, huh?” one sneered.
+    <br><br>
+    Jaden swallowed his fear and said, “You’re making fun of him for no reason. Knock it off—or I’ll make sure everyone sees how ridiculous you look.” (Which, honestly, was true—one of the bullies already had mustard on his shirt from lunch.)
+Slowly, other classmates began to inch forward. “Yeah, leave him alone!” someone muttered. Another chimed in, “Stop it, seriously!” In a matter of minutes, the bullies backed off, muttering threats that sounded more like grumbles of embarrassment than intimidation.
+Tariq looked at Jaden with wide eyes. “Thanks… I didn’t think anyone would care.”Jaden swallowed his fear and said, “You’re making fun of him for no reason. Knock it off—or I’ll make sure everyone sees how ridiculous you look.” (Which, honestly, was true—one of the bullies already had mustard on his shirt from lunch.)
+Slowly, other classmates began to inch forward. “Yeah, leave him alone!” someone muttered. Another chimed in, “Stop it, seriously!” In a matter of minutes, the bullies backed off, muttering threats that sounded more like grumbles of embarrassment than intimidation.
+Tariq looked at Jaden with wide eyes. “Thanks… I didn’t think anyone would care.”
+    <br><br>
+   Jaden shrugged, trying to act casual. “You’re welcome. But next time, don’t be afraid to speak up too. Silence only makes the bullies louder.”
+From that day on, Jaden realized something important: courage isn’t always loud or heroic. Sometimes, it’s just refusing to be a silent witness. And sometimes, a little humor—like pointing out mustard stains—can disarm fear faster than yelling ever could.
+</div>
 
-    <div id="novel-reader" class="glass-card secret-form" style="display:none;">
-        <div class="close-vault" onclick="closeNovel()">✕</div>
-        <div id="reader-header">
-            <h2 id="reader-title" class="highlight"></h2>
-            <div id="progress-bar"><div id="progress-fill"></div></div>
+       <button class="read-more-btn" onclick="openStoryFromCard(this)">READ FULL STORY</button>
+                </div>
+            </div>
         </div>
-        <div id="reader-content"></div>
-    </div>
+        <div class="story-card">
+    <div class="story-inner">
+        <div class="story-front jamal-bg">
+            <span class="badge">EMPATHY</span>
+            <h3>The Lone Seat</h3>
+        </div>
+        <div class="story-back">
+            <h4>The Power of Kindness</h4>
+            <p>Jamal sees a new student sitting alone every day. One small invitation could change a life—or maintain the status quo.</p>
+                  <div class="full-story-metadata" style="display: none;">
+    Jamal noticed her almost immediately. New girl. Red backpack. Nervous smile. She sat alone at lunch every single day, like a tiny island in a sea of noisy cafeteria chatter. Most of the students ignored her, busy swapping snacks or gossiping about the latest TikTok trends. But Jamal couldn’t.
+One day, Jamal decided it was time to act. He grabbed a tray of food, marched over, and plopped it down at her table. “Hey! Come sit with us!” he said with a grin that probably looked more like a grimace because his stomach was growling.
+    <br><br>
+    The girl blinked. “Really? I… I don’t want to bother anyone.”
+
+“Bother? No way!” Jamal said, dramatically pointing to the empty chair. “That chair has your name on it. It’s basically cursed if no one sits there.”
+
+She laughed. A little. And then sat.
+
+From that day, Jamal made it a habit to check on her. He introduced her to friends, shared hilarious memes, and even let her steal fries off his plate. Slowly, the new girl—whose name was Lila—started smiling more, laughing more, and participating in class discussions instead of shrinking into herself.
+    <br><br>
+    But the magic didn’t stop there. Others began noticing. One student said, “Hey, maybe we should invite her too,” and another whispered, “Yeah, she’s actually pretty funny.” Before long, Lila wasn’t the shy girl with the red backpack—she was part of the group.
+    <br><br>
+    Jamal learned something important: kindness doesn’t have to be big or dramatic to make a difference. A smile, a simple invitation, a shared fry—small acts ripple out in ways you can’t even imagine. And sometimes, those tiny gestures create a chain reaction that changes an entire environment.
+
+Plus, Jamal discovered another fun fact: being kind often comes with unexpected benefits. Lila once returned the favor by helping him study for a math test. He still failed, but at least they laughed about it instead of crying over quadratic equations.
+</div>
+
+       <button class="read-more-btn" onclick="openStoryFromCard(this)">READ FULL STORY</button>
+                </div>
+            </div>
+        </div>
+
+<div class="story-card">
+    <div class="story-inner">
+        <div class="story-front leah-bg">
+            <span class="badge">SELF-DISCOVERY</span>
+            <h3>Beyond Numbers</h3>
+        </div>
+        <div class="story-back">
+            <h4>Hidden Strengths</h4>
+            <p>Leah thinks she's "not smart" because of math. She must discover that her talent for storytelling is her true superpower.</p>
+                 <div class="full-story-metadata" style="display: none;">
+   Leah had always dreaded math class. Numbers seemed to dance around her notebook, refusing to stay in line. Equations mocked her, fractions looked like tiny monsters, and word problems made her head spin so fast she was sure she could power a small fan with it. Every time the teacher called on her, Leah froze, staring at the board as if it held secret alien messages.
+
+Her classmates seemed to float effortlessly through the formulas, chatting about square roots and angles like it was casual gossip. “Ugh,” Leah groaned one day, dropping her pencil dramatically onto her desk. “I’m doomed to fail forever!”
+    <br><br>
+  One afternoon, after another humiliating attempt at solving a quadratic equation, Leah’s teacher, Ms. Kamau, pulled her aside. “Leah,” she said gently, “everyone has strengths. Maybe math isn’t yours—but that doesn’t mean you don’t have gifts waiting to shine.”
+
+Leah frowned. Gifts? She barely had the energy to write her name neatly, let alone discover hidden talents. But she decided to give it a try. She remembered she loved storytelling. Back at home, she wrote a short story about a superhero who could talk to squirrels—because why not? She laughed at herself the entire time
+    <br><br>
+    The next week, Ms. Kamau encouraged Leah to submit a story to the school magazine. Leah hesitated, imagining her classmates snickering at a hero squirrel. But she took a deep breath and sent it anyway. To her astonishment, the story was published, and her classmates actually laughed and clapped in admiration at the school assembly.
+
+Leah realized something important: just because she struggled with numbers didn’t mean she was incapable. Her “weakness” in math had nudged her toward her real strength—creativity and writing. And as she honed that talent, she began to feel confident in herself in ways she never expected.
+    <br><br>
+    Soon, she even helped classmates write stories for projects, using her imagination to make boring assignments fun. Her math grades didn’t magically improve overnight—but Leah had discovered something far more valuable: her unique voice and hidden strengths.
+</div>
+
+       <button class="read-more-btn" onclick="openStoryFromCard(this)">READ FULL STORY</button>
+                </div>
+            </div>
+        </div>
+
+<div class="story-card">
+    <div class="story-inner">
+        <div class="story-front sophie-bg">
+            <span class="badge">COURAGE</span>
+            <h3>The Trembling Mic</h3>
+        </div>
+        <div class="story-back">
+            <h4>Finding Your Voice</h4>
+            <p>Sophie is terrified of the stage. She has a poem that could move the world, but only if she finds the courage to speak it.</p>
+                 <div class="full-story-metadata" style="display: none;">
+    Sophie had a secret. She loved poetry. She loved it so much that she wrote in the margins of her notebooks, scribbled verses on sticky notes, and even whispered rhymes to her cat at home. But there was one problem: Sophie had terrible stage fright. The thought of reading her poetry aloud in front of anyone—humans included—made her knees wobble like jelly.
+
+At school, whenever the teacher announced a speaking assignment, Sophie’s heart raced. She would shrink into her chair, pretending her shoes were suddenly fascinating. Her friends teased her lightly, and she laughed along, but inside, she felt frustrated and invisible.
+    <br><br>
+    One day, the school announced a talent showcase. Sophie’s friends nudged her: “You have to perform! Your poems are amazing!” Sophie wanted to hide in the janitor’s closet. Or better yet, she thought, move to a remote island where no one knows the word “poetry.”
+
+The night of the showcase, Sophie’s hands trembled, and her stomach somersaulted. She stepped on stage, her notes crumpled in her sweaty palms. She looked at the audience—hundreds of curious eyes staring—and nearly ran back off stage. Then she remembered something her mom had told her: “Courage isn’t the absence of fear. Courage is acting even when you’re scared.”
+    <br><br>
+   Sophie cleared her throat, took a deep breath, and began to read. Her first few lines quivered, but then something magical happened. She got lost in the rhythm, the words flowing like a river. She even threw in a dramatic pause for effect, and yes—someone giggled when she dramatically compared a math teacher to a dragon. She grinned secretly.
+    <br><br>
+   By the end, the audience was silent for a heartbeat… then erupted into applause. Sophie’s cheeks burned, but this time with pride, not embarrassment. She realized that her voice mattered. That her ideas, humor, and creativity were worth sharing—even if she was nervous.
+
+From that day on, Sophie spoke up in class, submitted more of her poems, and even started a small poetry club. She learned that fear is normal, but action—speaking your truth—can transform fear into confidence. And she never forgot the dragon comparison, which remained her most famous line at school for months.
+</div>
+
+       <button class="read-more-btn" onclick="openStoryFromCard(this)">READ FULL STORY</button>
+                </div>
+            </div>
+        </div>
+
+<div class="story-card">
+    <div class="story-inner">
+        <div class="story-front ethan-bg">
+            <span class="badge">RESPONSIBILITY</span>
+            <h3>The Park Project</h3>
+        </div>
+        <div class="story-back">
+            <h4>Small Acts, Big Change</h4>
+            <p>Ethan is tired of the litter in his neighborhood. He decides to stop complaining and start organizing.</p>
+                  <div class="full-story-metadata" style="display: none;">
+    Ethan loved his local park. It was the one place where he could kick a ball, ride his bike, or just lie on the grass staring at clouds shaped like dragons and spaceships. But lately, the park was changing—for the worse. Litter piled up in corners, the benches were covered in graffiti, and soda cans rolled around like tiny silver tumbleweeds.
+
+One Saturday, Ethan decided he had enough. “This park deserves better,” he muttered to himself, slapping on a pair of gloves that were probably three sizes too big. He grabbed a trash bag and started picking up the mess. Within an hour, he had already filled half a bag, and his cat-sized dog, Sparky, watched like an enthusiastic assistant who kept trying to chew the empty bag.
+    <br><br>
+    At first, people just stared. “What’s this kid doing?” whispered a neighbor, sipping coffee. But soon, curiosity turned into participation. His friend Maya joined, picking up trash and making exaggerated “eww” noises whenever she found a sticky soda cup. “Gross!” she shouted, waving it dramatically like it were a venomous snake. Ethan laughed, which made people smile.
+
+By noon, more classmates appeared, carrying gloves, trash bags, and even snacks for the volunteers. Even the principal stopped by, raising an eyebrow at the sight of Ethan, Maya, and a mini army of teens cleaning the park. “I didn’t think anyone cared,” she admitted. Ethan just grinned.
+    <br><br>
+   The park transformed. Benches were visible again, grass sparkled without wrappers, and children ran freely without stepping on banana peels. Ethan realized something powerful: even as a teen, he could spark change. One small action—starting a cleanup—rippled out, inspiring others to take responsibility.
+    <br><br>
+   And the funny part? Sparky, the dog, somehow managed to roll a trash bag downhill, scattering paper everywhere. Instead of panic, everyone laughed, turning a minor chaos into a bonding moment. Ethan learned that leadership isn’t about perfection—it’s about initiative, persistence, and sometimes laughing at the unexpected.
+</div>
+
+       <button class="read-more-btn" onclick="openStoryFromCard(this)">READ FULL STORY</button>
+                </div>
+            </div>
+        </div>
+
+        </div>
 </section>
 
 <div id="novel-reader" class="glass-card" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; height: 80vh; z-index: 5000; padding: 40px; overflow-y: auto; background: rgba(5, 5, 5, 0.95); border: 2px solid var(--accent);">
@@ -222,11 +518,42 @@
     <div id="reader-content"></div>
 </div>
 
-
-        </main>
-    </div>
+</main>
+</div>
 
     <script src="script.js"></script>
+</div>
+</div>
+
+<div id="story-reader-overlay" class="modal-overlay" style="display: none;">
+    <div class="reader-card animate-fadeIn">
+        <button class="close-reader" onclick="closeStory()">✕</button>
+        
+        <div class="reader-header">
+            <span id="reader-category" class="badge"></span>
+            <h2 id="reader-title"></h2>
+        </div>
+
+        <div class="reader-body">
+            <p id="reader-text"></p>
+            
+            <hr class="divider">
+            
+            <div class="interaction-zone">
+                <h4>RATE THIS SIMULATION</h4>
+                <div class="star-rating">
+                    <span onclick="rate(5)">★</span><span onclick="rate(4)">★</span><span onclick="rate(3)">★</span><span onclick="rate(2)">★</span><span onclick="rate(1)">★</span>
+                </div>
+
+                <h4>INTEL FEEDBACK (COMMENTS)</h4>
+                <div class="comment-box">
+                    <input type="text" id="comment-input" placeholder="Type your reflection...">
+                    <button onclick="postComment()">SEND</button>
+                </div>
+                <div id="comment-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
-
