@@ -14,39 +14,36 @@
 <body class="admin-body">
 
     <div id="main-app" style="display: flex;">
-        <aside class="sidebar">
-            <h2 class="sidebar-logo">ADMIN.MODE</h2>
-<aside class="sidebar" id="admin-sidebar">
-    <div class="collapse-btn" onclick="toggleSidebar()"></div>
-    
-    <div class="sidebar-logo">
-        <span class="logo-icon">A.</span><span>CONTROL</span>
+<aside class="sidebar">
+    <div class="sidebar-header" style="padding: 20px; text-align: center;">
+        <h2 style="color: var(--accent); letter-spacing: 2px; font-size: 1.2rem;">ADMIN_DASH</h2>
+        <div style="font-size: 0.6rem; color: #00ff00; opacity: 0.8;">● SYSTEM_ACTIVE</div>
     </div>
 
-<div class="nav-group">
-    <div class="nav-label">Command Center</div>
-    <div class="nav-item active" onclick="setAdminView('overview', this)">
-        <span class="nav-icon">📊</span><span class="nav-text">Dashboard</span>
-    </div>
-    <div class="nav-item" onclick="setAdminView('mentor-mgmt', this)">
-        <span class="nav-icon">📋</span><span class="nav-text">Mentors List</span>
-    </div>
-    <div class="nav-item" onclick="setAdminView('inbox', this)">
-        <span class="nav-icon">📥</span><span class="nav-text">Inbox</span>
-    </div>
-    <div class="nav-item" onclick="setAdminView('broadcast', this)">
-        <span class="nav-icon">📡</span><span class="nav-text">Broadcast</span>
-    </div>
-</div>
+    <nav class="admin-nav" style="flex: 1;">
+        <div class="nav-item active" onclick="setAdminView('overview', this)">
+            <span>📊</span> <span class="nav-text">Overview</span>
+        </div>
+        <div class="nav-item" onclick="setAdminView('mentor-mgmt', this)">
+            <span>👥</span> <span class="nav-text">Add Mentors</span>
+        </div>
+        <div class="nav-item" onclick="setAdminView('broadcast', this)">
+            <span>📡</span> <span class="nav-text">Send Notification</span>
+        </div>
+        <div class="nav-item" onclick="setAdminView('inbox', this)">
+            <span>📥</span> <span class="nav-text">User Messages</span>
+        </div>
+    </nav>
 
-    <div style="padding: 20px;">
-        <button class="btn-shine" style="width: 100%;" onclick="location.href='index.html'">🔙 Back to User</button>
+    <div class="sidebar-footer" style="padding: 20px; border-top: 1px solid #222;">
+        <a href="index.html" class="exit-link">
+            <span>🚀</span> <span class="nav-text">Back to teens
+            </span>
+        </a>
     </div>
 </aside>
-            <button class="btn-shine" onclick="window.location.href='index.html'">Back to User Site</button>
-        </aside>
 
-        <main class="content">
+<main class="content">
 <section id="overview" class="view active-view">
     <h1 class="terminal-title">Platform Statistics</h1>
     
@@ -112,7 +109,17 @@
     <input type="number" id="m-age" required>
     <label>Age</label>
 </div>
-        <button class="btn-shine" onclick="registerMentor()" style="margin-top: 20px;">Deploy Mentor to Platform</button>
+
+<div class="control-group">
+    <label class="control-label">Expertise Category</label>
+    <select id="m-category" class="neon-select">
+        <option value="Tech">Technology</option>
+        <option value="Art">Creative Arts</option>
+        <option value="Business">Business</option>
+        <option value="Science">Science</option>
+    </select>
+</div>
+        <button class="btn-shine" onclick="registerMentor()" style="margin-top: 20px;">Deploy Mentor to teens</button>
     </div>
 </section>
 
@@ -130,33 +137,42 @@
             </section>
 
 <section id="broadcast" class="view">
-    <div class="command-center glass-card">
-        <h1 class="terminal-title">Satellite Broadcast</h1>
-        <p class="terminal-subtitle">Global transmission to all active devices.</p>
-
-        <div class="control-group">
-            <label class="control-label">Transmission Content</label>
-            <div class="terminal-input-wrapper">
-                <textarea id="broadcast-msg" placeholder="Type global message here..."></textarea>
-                <div class="scan-line"></div>
-            </div>
+    <div class="admin-card transmission-deck">
+        <div class="deck-header">
+            <h1 class="cyan-text">NOTIFY THE TEENS</h1>
+            <p style="color: #666; font-size: 0.8rem;">Broadcast news or alerts to all active neural links.</p>
         </div>
 
-        <div class="control-group">
-            <label class="control-label">Signal Priority</label>
-            <div class="custom-select-wrapper">
-                <select id="broadcast-type">
-                    <option value="info">STANDARD SIGNAL (CYAN)</option>
-                    <option value="urgent">URGENT OVERRIDE (PURPLE)</option>
-                    <option value="emergency">CRITICAL PRIORITY (RED)</option>
-                </select>
-                <span class="select-arrow">▼</span>
+        <div class="terminal-body">
+            <div class="input-block">
+                <label>TRANSMISSION CONTENT</label>
+                <textarea id="broadcast-msg" class="admin-input" placeholder="Type news update or notification..."></textarea>
             </div>
-        </div>
 
-        <button class="btn-shine broadcast-btn" onclick="sendGlobalAlert()">
-            <span class="btn-icon">📡</span> EXECUTE BROADCAST
-        </button>
+            <div class="admin-grid-2">
+                <div class="input-block">
+                    <label>SIGNAL PRIORITY</label>
+                    <select id="broadcast-type" class="admin-input">
+                        <option value="info">STANDARD (CYAN)</option>
+                        <option value="urgent">URGENT (PURPLE)</option>
+                        <option value="emergency">CRITICAL (RED)</option>
+                    </select>
+                </div>
+                
+                <div class="input-block">
+                    <label>TARGET AUDIENCE</label>
+                    <div class="static-value">ALL ACTIVE TEENS</div>
+                </div>
+            </div>
+
+            <button class="btn-shine broadcast-btn" onclick="sendGlobalAlert()">
+                <span>📡</span> EXECUTE BROADCAST
+            </button>
+        </div>
+        
+        <div class="transmission-status">
+            <span class="pulse-dot"></span> SATELLITE_LINK_STABLE
+        </div>
     </div>
 </section>
         </main>
