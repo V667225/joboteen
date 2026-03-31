@@ -18,7 +18,7 @@
                 <input type="email" placeholder="Email Address">
                 <input type="password" placeholder="Create Password">
             </div>
-            <button class="btn-shine" onclick="launchPlatform()">Initialize Account</button>
+            <button class="btn-shine" onclick="launchPlatform()">Enter the JOBOTEEN</button>
         </div>
     </div>
 
@@ -36,20 +36,26 @@
         <span class="nav-icon">👤</span>
         <span class="nav-text">My Profile</span>
      </div>
-        <div class="nav-item" onclick="setView('edu-view', this)">
+        <div class="nav-item" onclick="setView('education-hub', this)">
             <span class="nav-icon">📚</span><span class="nav-text">Education</span>
         </div>
-        <div class="nav-item" onclick="setView('mentor-view', this)">
+        <div class="nav-item" onclick="setView('mentors-hub', this)">
             <span class="nav-icon">🤝</span><span class="nav-text">Find Mentor</span>
         </div>
         <div class="nav-item" onclick="setView('game-view', this)">
             <span class="nav-icon">🎮</span><span class="nav-text">Funtabu Hub</span>
         </div>
 
-<div class="nav-item" onclick="setView('mind-library'); renderMindLibrary();">
-    <span class="nav-icon">📚</span>
-    <span class="nav-text">Mind Library</span>
-</div>
+        <div class="nav-item" onclick="setView('mind-library'); renderMindLibrary();">
+            <span class="nav-icon">📚</span>
+            <span class="nav-text">Mind Library</span>
+        </div>
+
+        <div class="nav-item" onclick="setView('notifications-view')">
+            <span class="nav-icon">🔔</span>
+            <span class="nav-text">Notification</span>
+         <span id="nav-notif-dot" class="notif-dot" style="display:none;"></span>
+        </div>
     </div>
 
     <div style="padding: 20px;">
@@ -97,135 +103,83 @@
         </div>
     </div>
 </section>
-<section id="edu-view" class="view" style="display:none;">
+<section id="education-hub" class="view" style="display:none; width: 100%; padding: 40px 0;">
     <div class="view-header">
-        <h1 class="highlight-glitch" data-text="KNOWLEDGE_UPLINK">KNOWLEDGE_UPLINK</h1>
-        <p class="terminal-text">Upgrade your operative profile with global credentials.</p>
+        <h1 class="glitch" data-text="NEURAL_ACADEMY">NEURAL ACADEMY</h1>
+        <p class="subtitle">Optimize your cognitive architecture for maximum retention.</p>
     </div>
 
-    <div class="edu-flex-container">
-        <div class="glass-card big-card career-hero">
-            <div class="card-badge">RANK: ELITE</div>
-            <div class="hero-content">
-                <h2>Pathfinder Protocol</h2>
-                <p>Don't just pick a job. Simulate a future. Our neural engine maps your skills to high-impact global careers.</p>
-                <button class="pulse-btn" onclick="startCareerSim()">INITIALIZE SIMULATION</button>
-            </div>
-            <div class="visual-deco">
-                <div class="circle-ring"></div>
-            </div>
+    <div class="neon-boost-container">
+        <div class="boost-header">
+            <span class="pulse-icon">⚡</span>
+            <h3>DAILY_DATA_STREAM</h3>
         </div>
-
-        <div class="edu-grid">
-            <div class="glass-card quest-card">
-                <div class="quest-header">
-                    <span class="category">FUNDING</span>
-                    <span class="xp">+5000 XP</span>
-                </div>
-                <h3>Global Bounties</h3>
-                <p>Secure the bag. International scholarships currently accepting applications.</p>
-                <div class="bounty-list">
-                    <div class="bounty-item"><span>◈</span> Chevening 2026 <span class="status-live">LIVE</span></div>
-                    <div class="bounty-item"><span>◈</span> Erasmus+ Intel <span class="status-live">LIVE</span></div>
-                </div>
-            </div>
-
-            <div class="glass-card quest-card">
-                <div class="quest-header">
-                    <span class="category">STRENGTH</span>
-                    <span class="xp">MODULAR</span>
-                </div>
-                <h3>Skill Tree</h3>
-                <div class="skill-progress">
-                    <div class="skill-tag">Python <div class="p-bar"><div class="fill" style="width:70%"></div></div></div>
-                    <div class="skill-tag">Design <div class="p-bar"><div class="fill" style="width:40%"></div></div></div>
-                </div>
-                <button class="btn-outline">VIEW ALL MODULES</button>
-            </div>
+        <div class="boost-content">
+            <p id="daily-motivation">"Initializing motivation matrix..."</p>
+            <div id="daily-tip" class="neon-tip-box"></div>
         </div>
-    </div>
-
-      <div class="view-header">
-        <h1 class="highlight">Intel & Education</h1>
-        <p class="subtitle">Global resources and interactive pathways for the next generation.</p>
     </div>
 
     <div class="edu-grid">
-        <div class="glass-card edu-card">
-            <div class="edu-icon">🎓</div>
-            <h3>Scholarship Uplinks</h3>
-            <p>Access global funding for international universities and specialized research.</p>
-            <ul class="edu-list">
-                <li><a href="#" class="edu-link">◈ Chevening Global Fellowship</a></li>
-                <li><a href="#" class="edu-link">◈ Erasmus+ Exchange Program</a></li>
-                <li><a href="#" class="edu-link">◈ Mastercard Foundation Scholars</a></li>
-            </ul>
-        </div>
-
-        <div class="glass-card edu-card">
-            <div class="edu-icon">🚀</div>
-            <h3>Career Pathing</h3>
-            <p>Interactive roadmaps for high-impact sectors including Tech, Arts, and Engineering.</p>
-            <div class="textarea-wrapper" style="margin-top: 15px;">
-                <button class="btn-shine small-btn" style="width: 100%;" onclick="startCareerSim()">INITIALIZE CAREER SIMULATOR</button>
+        <div class="glass-card edu-main-card">
+            <h3 class="cyan-text">SKILL_MODS</h3>
+            <div class="skill-item" onclick="openEduModal('Focus')">
+                <span>🎯 Pomodoro Technique</span>
+                <i class="arrow">→</i>
+            </div>
+            <div class="skill-item" onclick="openEduModal('Memory')">
+                <span>🧠 Spaced Repetition</span>
+                <i class="arrow">→</i>
+            </div>
+            <div class="skill-item" onclick="openEduModal('Notes')">
+                <span>📝 Active Recall</span>
+                <i class="arrow">→</i>
             </div>
         </div>
 
-        <div class="glass-card edu-card">
-            <div class="edu-icon">🛠️</div>
-            <h3>Certified Skillsets</h3>
-            <p>Industry-recognized certifications to upgrade your operative profile.</p>
-            <div class="course-tags">
-                <span class="tag">Python_Core</span>
-                <span class="tag">UX_Design</span>
-                <span class="tag">Neural_Lead</span>
+        <div class="glass-card edu-main-card">
+            <h3 class="purple-text">SUBJECT_HELP</h3>
+            <div class="edu-tabs">
+                <button onclick="showEduTab('math', this)" class="tab-btn active">MATH</button>
+                <button onclick="showEduTab('science', this)" class="tab-btn">SCI</button>
+                <button onclick="showEduTab('writing', this)" class="tab-btn">ENG</button>
             </div>
-            <a href="#" class="view-all">Browse Full Directory →</a>
+            <div id="edu-tab-content" class="tab-display">
+                </div>
         </div>
+
+        <div class="glass-card edu-main-card">
+            <h3 class="cyan-text">FOCUS LOCK</h3>
+            <div class="pomodoro-v2">
+                <div id="timer-display">25:00</div>
+                <div class="timer-controls">
+                    <button class="btn-shine small-btn" onclick="startPomodoro()">START</button>
+                    <button class="btn-shine small-btn" onclick="resetPomodoro()">RESET</button>
+                </div>
+            </div>
+            <div class="audio-sync">
+                <label>AMBIENT SYNC</label>
+                <select id="audio-selector" class="neon-select" onchange="toggleAmbient()">
+                    <option value="none">OFF</option>
+                    <option value="rain">CYBER RAIN</option>
+                    <option value="lofi">NEON BEATS</option>
+                </select>
+            </div>
+        </div>
+    </div>
 </section>
 
 
-<section id="mentor-view" class="view">
-    <div class="view-header">
-        <h1>Connect with a Mentor</h1>
-        <p>Your privacy is our priority. Share what's on your mind with a certified guide.</p>
-    </div>
+<section id="mentors-hub" class="view" style="display:none;">
+    <div class="mentor-stories">
+    <div class="story-circle active-story" onclick="filterMentors('all')"><span>All</span></div>
+    <div class="story-circle" onclick="filterMentors('Tech')"><span>Tech</span></div>
+    <div class="story-circle" onclick="filterMentors('Art')"><span>Art</span></div>
+    <div class="story-circle" onclick="filterMentors('Business')"><span>Biz</span></div>
+</div>
 
-    <div class="mentor-grid">
-        <div class="mentor-card glass-card">
-            <div class="mentor-pic" style="background: url('https://via.placeholder.com/80')"></div>
-            <h3>Mentor Ambani</h3>
-            <span class="specialty">Adolescent Growth</span>
-            <button class="btn-shine small" onclick="openBooking('Ambani')">Book Session</button>
+    <div class="mentor-explore-grid" id="mentor-social-feed">
         </div>
-        
-        <div class="mentor-card glass-card">
-            <div class="mentor-pic" style="background: url('https://via.placeholder.com/80')"></div>
-            <h3>Mentor Vince</h3>
-            <span class="specialty">Career & Mindset</span>
-            <button class="btn-shine small" onclick="openBooking('Vina')">Book Session</button>
-        </div>
-    </div>
-
-    <div id="booking-form" class="glass-card secret-form">
-        <h2 id="booking-title">Share with your Mentor</h2>
-        <div class="input-group">
-            <label>The Problem / Challenge</label>
-            <textarea id="problem-desc" placeholder="Describe what you are going through..."></textarea>
-        </div>
-        <div class="input-group">
-            <label>Urgency Level</label>
-            <select id="urgency">
-                <option value="low">Just need a talk</option>
-                <option value="medium">Feeling stressed</option>
-                <option value="high">Urgent Support Needed</option>
-            </select>
-
-            <div class="close-vault" onclick="closeBooking()">✕</div>
-              <h2 id="booking-title">Share with your Mentor</h2>
-            </div>
-        <button class="btn-shine" onclick="submitRequest()">Send to Mentor Privately</button>
-    </div>
 </section>
 
 <section id="gnc-view" class="view">
@@ -236,53 +190,47 @@
                 </div>
 </section>
 
-<section id="game-view" class="view">
+<section id="game-view" class="view" style="display:none;">
+    <div class="view-header">
+        <h1 class="glitch" data-text="NEURAL_ARCADE">NEURAL BOOSTERS</h1>
+        <p class="subtitle">Select a simulation to begin. All progress is synced to your neural link.</p>
+    </div>
 
-
-<div id="novel-reader" class="glass-card secret-form" style="display:none; width: 80%; height: 80vh; overflow-y: auto;">
-    <div class="close-vault" onclick="closeNovel()">✕</div>
-    <h1 id="reader-title" class="highlight"></h1>
-    <div id="reader-content" class="reader-body"></div>
+    <div class="edu-grid">
+<div class="edu-grid">
+    <div class="glass-card edu-card">
+        <div class="edu-icon">♟️</div>
+        <h3>Neural Chess</h3>
+        <p>Strategic simulation to enhance cognitive processing.</p>
+        <button class="btn-shine small-btn" onclick="openGame('games/chess.html')">START</button>
+    </div>
 </div>
 
-    <div class="game-header">
-        <h1 class="glitch" data-text="NEURAL_LINK">NEURAL LINK</h1>
-        <div class="game-meta">
-            <div class="status-box">
-                <span class="label">OS_STATUS:</span>
-                <span id="game-status">AWAITING_INPUT...</span>
-            </div>
-            
-            <div class="currency-box">
-                <span class="coin-icon">◈</span>
-                <span id="neural-credits">0000</span>
-                <span class="currency-unit">NC</span>
-            </div>
-        </div>
+<div id="game-modal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:999; justify-content:center; align-items:center;">
+    <div class="glass-card" style="width:80%; height:80%; position:relative;">
+        <button onclick="document.getElementById('game-modal').style.display='none'" style="position:absolute; right:20px; top:20px; color:white; background:none; border:1px solid white; cursor:pointer;">CLOSE</button>
+        <iframe id="game-frame" src="" style="width:100%; height:100%; border:none;"></iframe>
     </div>
+</div>
+<div class="glass-card edu-card">
+    <div class="edu-icon">🔢</div>
+    <h3>Neural Sudoku</h3>
+    <p>Calibrate your logic processors.</p>
+    <button class="btn-shine small-btn" onclick="openGame('games/s.html')">START</button>
+</div>
 
-    <div class="ttt-container">
-        <div class="ttt-grid" id="ttt-board">
-            <div class="cell" onclick="handleMove(0)"></div>
-            <div class="cell" onclick="handleMove(1)"></div>
-            <div class="cell" onclick="handleMove(2)"></div>
-            <div class="cell" onclick="handleMove(3)"></div>
-            <div class="cell" onclick="handleMove(4)"></div>
-            <div class="cell" onclick="handleMove(5)"></div>
-            <div class="cell" onclick="handleMove(6)"></div>
-            <div class="cell" onclick="handleMove(7)"></div>
-            <div class="cell" onclick="handleMove(8)"></div>
-        </div>
-    </div>
+<div class="glass-card edu-card">
+    <div class="edu-icon">⚪</div>
+    <h3>Neural Checkers</h3>
+    <p>Tactical override simulation.</p>
+    <button class="btn-shine small-btn" onclick="openGame('games/c.html')">START</button>
+</div>
 
-    <div class="game-controls">
-        <div class="status-indicator">
-            <div class="pulse-dot"></div>
-            <span>Bot_Core: Active</span>
+    <div id="game-screen-overlay" class="modal-overlay" style="display: none;">
+        <div class="reader-card" style="width: 90%; height: 90vh;">
+            <button class="close-reader" onclick="closeGame()">✕ EXIT SIMULATION</button>
+            <iframe id="game-frame" src="" style="width: 100%; height: 100%; border: none; border-radius: 12px;"></iframe>
         </div>
-        <button class="btn-shine reset-btn" onclick="resetTTT()">
-            REBOOT_NEURAL_GRID
-        </button>
     </div>
 </section>
 
@@ -517,6 +465,23 @@ By noon, more classmates appeared, carrying gloves, trash bags, and even snacks 
     <hr style="border: 0; border-top: 1px solid rgba(0, 242, 255, 0.2); margin-bottom: 20px;">
     <div id="reader-content"></div>
 </div>
+
+<section id="notifications-view" class="view" style="display:none;">
+    <div class="view-header" style="margin-bottom: 30px;">
+        <h1 class="glitch" data-text="SYSTEM_SIGNALS">NOTIFICATIONS</h1>
+        <p class="subtitle">Get all notifications.</p>
+    </div>
+
+    <div class="notifications-container">
+        <div id="empty-notifications" style="text-align: center; padding: 50px; color: #555;">
+            <span style="font-size: 3rem; display: block; margin-bottom: 10px;">📡</span>
+            <p>Neural inbox is empty. Waiting for admin signals...</p>
+        </div>
+
+        <div id="notifications-list">
+            </div>
+    </div>
+</section>
 
 </main>
 </div>
