@@ -1,26 +1,21 @@
 // INITIALIZE PLATFORM
 function launchPlatform() {
     const nameInput = document.getElementById('reg-name');
-    if(nameInput.value.trim() === "") {
+    if(!nameInput || nameInput.value.trim() === "") {
         alert("Please enter your name to initialize!");
         return;
     }
     
-    document.getElementById('user-display').innerText = nameInput.value;
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('main-app').style.display = 'flex';
-    renderMindLibrary();
-}
-function launchPlatform() {
-    const nameInput = document.getElementById('reg-name');
-    if(nameInput.value.trim() === "") {
-        alert("Enter your name to start!");
-        return;
-    }
-    
+    // Set user name
+    const userDisplay = document.getElementById('user-display');
+    if(userDisplay) userDisplay.innerText = nameInput.value;
+
     // Switch the screens
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('main-app').style.display = 'flex';
+    
+    // Run initial renders
+    if (typeof renderMindLibrary === 'function') renderMindLibrary();
 }
 // NAVIGATION ENGINE
 function toggleMenu(id) {
@@ -890,3 +885,561 @@ function openStoryFromCard(button) {
     // 4. Show the Modal
     document.getElementById('story-reader-overlay').style.display = 'flex';
 }
+
+function openGame(gameUrl) {
+    const modal = document.getElementById('game-modal');
+    const frame = document.getElementById('game-frame');
+    
+    if (modal && frame) {
+        frame.src = gameUrl; // This must match the filename exactly, e.g., 'chess.html'
+        modal.style.display = 'flex';
+    } else {
+        console.error("Error: Modal or Frame not found in index.html");
+    }
+}
+
+// Dynamic Content Arrays
+const dailyContent = {
+    motivations: [
+        "Your potential is endless. Go do what you were created to do.",
+        "Small progress is still progress. Keep moving!",
+        "You don't have to be perfect to be amazing."
+    ],
+    tips: [
+        "The Feynman Technique: Teach what you learned to someone else to master it.",
+        "Eat the Frog: Do your hardest task first thing in the morning.",
+        "Hydration check! Your brain is 75% water."
+    ]
+};
+
+// 1. Daily Boost Logic (Rotates based on Date)
+function updateDailyBoost() {
+    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+    const index = dayOfYear % dailyContent.motivations.length;
+    
+    document.getElementById('daily-motivation').innerText = dailyContent.motivations[index];
+    document.getElementById('daily-tip').innerText = "💡 Tip of the day: " + dailyContent.tips[index];
+}
+
+// 2. Tabbed Interface for Subjects
+function showEduTab(subject) {
+    const content = {
+        math: "<b>Math Trick:</b> To multiply any 2-digit number by 11, add the two digits and put the sum in the middle! (e.g., 24 x 11 = 2[2+4]4 = 264).",
+        science: "<b>Science Shortcut:</b> Remember the order of planets with: 'My Very Educated Mother Just Served Us Noodles'.",
+        writing: "<b>Writing Tip:</b> Use the 'Show, Don't Tell' rule. Instead of saying 'He was nervous', say 'His hands were shaking'."
+    };
+    document.getElementById('edu-tab-content').innerHTML = content[subject];
+}
+
+// 3. Pomodoro Timer
+let timer;
+let timeLeft = 1500; // 25 minutes
+function startPomodoro() {
+    if (timer) clearInterval(timer);
+    timer = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            alert("Break time! You did great.");
+            return;
+        }
+        timeLeft--;
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        document.getElementById('timer-display').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }, 1000);
+}
+
+// Initialize on Load
+window.addEventListener('DOMContentLoaded', () => {
+    updateDailyBoost();
+    showEduTab('math');
+});
+
+// --- Education Hub Content ---
+const eduData = {
+    tabs: {
+        math: "<b>TRICK:</b> To square a number ending in 5 (e.g. 35), multiply the first digit by the next number (3x4=12) and add 25 at the end. Result: 1225.",
+        science: "<b>MNEMONIC:</b> 'Dear King Philip Came Over For Good Soup' (Domain, Kingdom, Phylum, Class, Order, Family, Genus, Species).",
+        writing: "<b>STYLE:</b> Eliminate 'filler' words like 'very', 'really', and 'just' to increase the impact of your arguments by 40%."
+    },
+    skills: {
+        'Focus': "<b>Pomodoro:</b> Work for 25 mins, break for 5. It prevents neural fatigue and keeps dopamine levels steady.",
+        'Memory': "<b>Spaced Repetition:</b> Review info at 1 day, 7 days, and 30 days to move it from short-term to long-term memory.",
+        'Notes': "<b>Active Recall:</b> Instead of re-reading, close the book and write down everything you remember. This strengthens neural pathways."
+    }
+};
+
+function showEduTab(subject, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('edu-tab-content').innerHTML = eduData.tabs[subject];
+}
+
+function openEduModal(skill) {
+    // Reusing your existing story-reader-overlay for consistency
+    const overlay = document.getElementById('story-reader-overlay');
+    document.getElementById('reader-title').innerText = skill + " Module";
+    document.getElementById('reader-text').innerHTML = eduData.skills[skill];
+    overlay.style.display = 'flex';
+}
+
+// Timer Logic
+let ptimer;
+let pTimeLeft = 1500;
+function startPomodoro() {
+    clearInterval(ptimer);
+    ptimer = setInterval(() => {
+        pTimeLeft--;
+        const mins = Math.floor(pTimeLeft / 60);
+        const secs = pTimeLeft % 60;
+        document.getElementById('timer-display').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        if (pTimeLeft <= 0) {
+            clearInterval(ptimer);
+            notify("Focus Session Complete. Take a break!");
+        }
+    }, 1000);
+}
+
+function resetPomodoro() {
+    clearInterval(ptimer);
+    pTimeLeft = 1500;
+    document.getElementById('timer-display').innerText = "25:00";
+}
+
+// Initial Load
+document.addEventListener('DOMContentLoaded', () => {
+    updateDailyBoost(); // Use your existing daily logic
+    showEduTab('math', document.querySelector('.tab-btn'));
+});
+
+
+
+// ==========================================
+// MENTOR HUB: SOCIAL FEED SYSTEM
+// ==========================================
+
+/**
+ * Renders the Mentors Hub as a Social Media Feed
+ * This should be triggered whenever 'mentors-hub' view is opened.
+ */
+function renderMentors() {
+    const feedContainer = document.getElementById('mentor-social-feed');
+    if (!feedContainer) return;
+    
+    // Fetch mentors from the same storage used by admin.html
+    const mentors = JSON.parse(localStorage.getItem('joboMentors')) || [];
+    
+    // Clear current feed
+    feedContainer.innerHTML = ""; 
+
+    if (mentors.length === 0) {
+        feedContainer.innerHTML = `
+            <div class="feed-post" style="border: 1px dashed var(--primary); text-align: center;">
+                <div class="post-content">
+                    <p style="color: #666; padding: 40px;">
+                        <span style="display:block; font-size: 2rem; margin-bottom: 10px;">📡</span>
+                        No active mentors found in the neural network.<br>
+                        Add mentors via the Admin Portal to populate this feed.
+                    </p>
+                </div>
+            </div>`;
+        return;
+    }
+
+    // Generate Social Posts for each Mentor
+    mentors.forEach((m, index) => {
+        const post = document.createElement('div');
+        post.className = "feed-post mentor-card-glow animate-fadeIn";
+        post.style.animationDelay = `${index * 0.1}s`;
+        
+        post.innerHTML = `
+            <div class="post-header">
+                <div class="post-author">
+                    <div class="mentor-avatar" style="background-image: url('${m.img || 'https://via.placeholder.com/50'}')"></div>
+                    <div class="author-info">
+                        <span class="mentor-name">${m.name}</span>
+                        <span class="mentor-meta">${m.edu} • Verified Expert</span>
+                    </div>
+                </div>
+                <button class="follow-btn" onclick="this.innerText='FOLLOWED'; this.style.color='var(--accent)'">FOLLOW</button>
+            </div>
+            
+            <div class="post-content">
+                <p>Hello Network! I'm specializing in <b>${m.edu}</b>. If you're looking to optimize your skills or need a project review, feel free to reach out. I'm currently accepting new students for 1-on-1 guidance.</p>
+                <div class="post-tags">
+                    <span class="tag">#${m.edu.replace(/\s+/g, '')}</span>
+                    <span class="tag">#CareerGrowth</span>
+                    <span class="tag">#Mentorship</span>
+                </div>
+            </div>
+
+            <div class="post-actions">
+                <button class="action-btn neon-btn-small" onclick="initiateMentorChat('${m.name}')">
+                    <span class="btn-icon">💬</span> INITIATE_CHAT
+                </button>
+                <button class="action-btn" onclick="toggleLike(this)">❤️ <span class="count">24</span></button>
+                <button class="action-btn">🔖 SAVE</button>
+            </div>
+        `;
+        feedContainer.appendChild(post);
+    });
+}
+
+/**
+ * Handles the "Like" interaction
+ */
+function toggleLike(btn) {
+    const countSpan = btn.querySelector('.count');
+    let count = parseInt(countSpan.innerText);
+    if (!btn.classList.contains('liked')) {
+        btn.classList.add('liked');
+        btn.style.color = "var(--primary)";
+        countSpan.innerText = count + 1;
+    } else {
+        btn.classList.remove('liked');
+        btn.style.color = "#888";
+        countSpan.innerText = count - 1;
+    }
+}
+
+/**
+ * Handles the transition to a chat interface
+ */
+function initiateMentorChat(name) {
+    notify(`Establishing secure link to ${name}...`);
+    // Here you can redirect to a chat view or open a modal
+    setTimeout(() => {
+        alert(`Request sent to ${name}. They will respond to your dashboard soon.`);
+    }, 1000);
+}
+
+// Update your main setView function logic
+// Look for where your 'setView' function is and ensure it calls renderMentors()
+const originalSetView = setView; 
+setView = function(viewId) {
+    originalSetView(viewId); // Run the existing code
+    if (viewId === 'mentors-hub') {
+        renderMentors();
+    }
+};
+
+// --- MENTOR CHAT SYSTEM ---
+
+function initiateMentorChat(mentorName) {
+    const overlay = document.getElementById('story-reader-overlay');
+    const readerTitle = document.getElementById('reader-title');
+    const readerText = document.getElementById('reader-text');
+    
+    if (!overlay) return;
+
+    // Set up the Chat Interface
+    readerTitle.innerText = `DIRECT_LINK: ${mentorName}`;
+    readerText.innerHTML = `
+        <div id="chat-history" style="height: 300px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--primary);">
+            <div class="msg" style="color: var(--accent); margin-bottom: 10px;"><b>${mentorName}:</b> Connection established. How can I assist with your trajectory today?</div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="user-msg-input" placeholder="Type your transmission..." style="flex: 1; background: #000; border: 1px solid var(--accent); color: white; padding: 10px; border-radius: 5px;">
+            <button class="btn-shine small-btn" onclick="sendToMentor('${mentorName}')">SEND</button>
+        </div>
+    `;
+    
+    overlay.style.display = 'flex';
+}
+
+function sendToMentor(mentorName) {
+    const input = document.getElementById('user-msg-input');
+    const history = document.getElementById('chat-history');
+    
+    if (!input.value.trim()) return;
+
+    // 1. Show User Message
+    const userMsg = document.createElement('div');
+    userMsg.style.marginBottom = "10px";
+    userMsg.innerHTML = `<b style="color: #fff;">YOU:</b> ${input.value}`;
+    history.appendChild(userMsg);
+
+    const userText = input.value;
+    input.value = "";
+    history.scrollTop = history.scrollHeight;
+
+    // 2. Simulated Mentor "Neural" Reply
+    setTimeout(() => {
+        const reply = document.createElement('div');
+        reply.style.marginBottom = "10px";
+        reply.style.color = "var(--accent)";
+        
+        // Basic AI Logic for reply
+        let response = "I've received your data. Let's analyze this further.";
+        if (userText.toLowerCase().includes("hello")) response = "Greetings. Neural links are stable.";
+        if (userText.toLowerCase().includes("help")) response = "Acknowledged. Specify the module or project you're struggling with.";
+        
+        reply.innerHTML = `<b>${mentorName}:</b> ${response}`;
+        history.appendChild(reply);
+        history.scrollTop = history.scrollHeight;
+        
+        // Notify the user
+        notify("Incoming Transmission...");
+    }, 1500);
+}
+
+// 1. Unified Render Function (The "Engine")
+// This handles both the initial showing and the filtering
+function renderMentors(filterCategory = 'all') {
+    const feed = document.getElementById('mentor-social-feed');
+    if (!feed) return;
+    
+    // Get the data
+    const allMentors = JSON.parse(localStorage.getItem('joboMentors')) || [];
+    
+    // Clear the current view
+    feed.innerHTML = "";
+
+    // Apply Filter Logic
+    const filteredMentors = filterCategory === 'all' 
+        ? allMentors 
+        : allMentors.filter(m => m.category === filterCategory);
+
+    if (filteredMentors.length === 0) {
+        feed.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #666; padding: 50px;">
+            No experts found in the ${filterCategory} sector.
+        </p>`;
+        return;
+    }
+
+    // Draw the Instagram-style Cards
+    filteredMentors.forEach(m => {
+        const card = document.createElement('div');
+        card.className = "mentor-social-card animate-fadeIn";
+        
+        // High-quality fallback image
+        const bgImg = m.img || 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1000&q=80';
+        
+        card.innerHTML = `
+            <div class="card-image-bg" style="background-image: url('${bgImg}')"></div>
+            <div class="card-info-overlay">
+                <div class="mentor-name-tag">
+                    @${m.name.replace(/\s+/g, '_').toLowerCase()} <span class="verified-check">✓</span>
+                </div>
+                <p style="font-size: 0.8rem; opacity: 0.8; margin: 5px 0;">${m.edu}</p>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn-shine small-btn" style="padding: 5px 15px;" onclick="initiateMentorChat('${m.name}')">MESSAGE</button>
+                    <button class="action-btn" onclick="this.style.color='var(--primary)'">❤️</button>
+                </div>
+            </div>
+        `;
+        feed.appendChild(card);
+    });
+}
+
+// 2. Updated Filter Function (The "Trigger")
+function filterMentors(cat) {
+    // Run the render engine with the chosen category
+    renderMentors(cat);
+    
+    // Update the visual "active" state of the story circles
+    document.querySelectorAll('.story-circle').forEach(el => {
+        el.classList.remove('active-story');
+        // Match the text inside the span to the category
+        if (el.innerText.toLowerCase().includes(cat.toLowerCase()) || (cat === 'all' && el.innerText.toLowerCase() === 'all')) {
+            el.classList.add('active-story');
+        }
+    });
+
+    notify(`Filtering network: ${cat.toUpperCase()}`);
+}
+
+// --- GLOBAL SIGNAL RECEIVER ---
+
+// --- NOTIFICATION ARCHIVE SYSTEM ---
+
+function listenForBroadcasts() {
+    setInterval(() => {
+        const signal = localStorage.getItem('jobo_global_alert');
+        if (signal) {
+            const data = JSON.parse(signal);
+            const lastSeenId = localStorage.getItem('jobo_last_signal_id');
+
+            if (data.id != lastSeenId) {
+                // 1. Save to History
+                saveToNotificationHistory(data);
+                // 2. Show Popup
+                displayGlobalNotification(data);
+                // 3. Show Red Dot on Bell
+                document.getElementById('nav-notif-dot').style.display = 'block';
+                
+                localStorage.setItem('jobo_last_signal_id', data.id);
+            }
+        }
+    }, 3000);
+}
+
+function saveToNotificationHistory(data) {
+    let history = JSON.parse(localStorage.getItem('jobo_notification_history')) || [];
+    // Add to the beginning of the array (newest first)
+    history.unshift(data);
+    // Keep only the last 20 notifications
+    if (history.length > 20) history.pop();
+    localStorage.setItem('jobo_notification_history', JSON.stringify(history));
+}
+
+function renderNotifications() {
+    const list = document.getElementById('notifications-list');
+    const emptyMsg = document.getElementById('empty-notifications');
+    const history = JSON.parse(localStorage.getItem('jobo_notification_history')) || [];
+
+    if (history.length === 0) {
+        emptyMsg.style.display = 'block';
+        list.innerHTML = "";
+        return;
+    }
+
+    emptyMsg.style.display = 'none';
+    list.innerHTML = history.map(item => `
+        <div class="signal-card">
+            <div class="signal-icon-box">${item.style === 'emergency' ? '🚨' : '📡'}</div>
+            <div class="signal-content">
+                <h4 style="color: ${getPriorityColor(item.style)}">${item.style}_OVERRIDE</h4>
+                <div class="signal-text">${item.message}</div>
+                <div class="signal-date">${new Date(item.id).toLocaleString()}</div>
+            </div>
+        </div>
+    `).join('');
+
+    // Hide the red dot when they view notifications
+    document.getElementById('nav-notif-dot').style.display = 'none';
+}
+
+function getPriorityColor(style) {
+    if (style === 'urgent') return 'var(--primary)';
+    if (style === 'emergency') return '#ff4757';
+    return 'var(--accent)';
+}
+
+// Update setView to trigger the render
+const prevSetView = setView;
+setView = function(viewId) {
+    if (typeof prevSetView === 'function') prevSetView(viewId);
+    if (viewId === 'notifications-view') renderNotifications();
+};
+
+// Initial call
+listenForBroadcasts();
+
+function displayGlobalNotification(data) {
+    // Create a high-aesthetic notification toast
+    const toast = document.createElement('div');
+    toast.className = `broadcast-toast ${data.style}`; // Styles: info, urgent, emergency
+    
+    toast.innerHTML = `
+        <div class="toast-icon">📡</div>
+        <div class="toast-body">
+            <div class="toast-header">INCOMING_TRANSMISSION</div>
+            <div class="toast-msg">${data.message}</div>
+            <div class="toast-time">${data.timestamp}</div>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
+    `;
+
+    document.body.appendChild(toast);
+
+    // Auto-remove after 10 seconds if not closed
+    setTimeout(() => {
+        if(toast) toast.classList.add('fade-out');
+        setTimeout(() => toast.remove(), 500);
+    }, 10000);
+}
+
+// Start listening when the app launches
+// --- NOTIFICATION ARCHIVE SYSTEM ---
+
+function listenForBroadcasts() {
+    setInterval(() => {
+        const signal = localStorage.getItem('jobo_global_alert');
+        if (signal) {
+            const data = JSON.parse(signal);
+            const lastSeenId = localStorage.getItem('jobo_last_signal_id');
+
+            if (data.id != lastSeenId) {
+                // 1. Save to History
+                saveToNotificationHistory(data);
+                // 2. Show Popup
+                displayGlobalNotification(data);
+                // 3. Show Red Dot on Bell
+                document.getElementById('nav-notif-dot').style.display = 'block';
+                
+                localStorage.setItem('jobo_last_signal_id', data.id);
+            }
+        }
+    }, 3000);
+}
+
+function saveToNotificationHistory(data) {
+    let history = JSON.parse(localStorage.getItem('jobo_notification_history')) || [];
+    // Add to the beginning of the array (newest first)
+    history.unshift(data);
+    // Keep only the last 20 notifications
+    if (history.length > 20) history.pop();
+    localStorage.setItem('jobo_notification_history', JSON.stringify(history));
+}
+
+function renderNotifications() {
+    const list = document.getElementById('notifications-list');
+    const emptyMsg = document.getElementById('empty-notifications');
+    const history = JSON.parse(localStorage.getItem('jobo_notification_history')) || [];
+
+    if (history.length === 0) {
+        emptyMsg.style.display = 'block';
+        list.innerHTML = "";
+        return;
+    }
+
+    emptyMsg.style.display = 'none';
+    list.innerHTML = history.map(item => `
+        <div class="signal-card">
+            <div class="signal-icon-box">${item.style === 'emergency' ? '🚨' : '📡'}</div>
+            <div class="signal-content">
+                <h4 style="color: ${getPriorityColor(item.style)}">${item.style}_OVERRIDE</h4>
+                <div class="signal-text">${item.message}</div>
+                <div class="signal-date">${new Date(item.id).toLocaleString()}</div>
+            </div>
+        </div>
+    `).join('');
+
+    // Hide the red dot when they view notifications
+    document.getElementById('nav-notif-dot').style.display = 'none';
+}
+
+function getPriorityColor(style) {
+    if (style === 'urgent') return 'var(--primary)';
+    if (style === 'emergency') return '#ff4757';
+    return 'var(--accent)';
+}
+
+// SAFER NAVIGATION INTEGRATION
+function setView(viewId) {
+    // 1. Hide all views
+    document.querySelectorAll('.view').forEach(v => {
+        v.style.display = 'none';
+        v.classList.remove('active-view');
+    });
+    
+    // 2. Show the target view
+    const target = document.getElementById(viewId);
+    if(target) {
+        target.style.display = 'block';
+        target.classList.add('active-view');
+    }
+
+    // 3. Update Sidebar Active State
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // 4. Trigger Specific Page Renders
+    if (viewId === 'notifications-view') renderNotifications();
+    if (viewId === 'mentors-hub') renderMentors();
+}
+
+// Initial call
+listenForBroadcasts();
