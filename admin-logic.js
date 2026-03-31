@@ -130,3 +130,80 @@ window.onload = () => {
     displayAdminMentors();
     setInterval(loadRequests, 5000);
 };
+
+function registerMentor() {
+    const name = document.getElementById('m-name').value;
+    const edu = document.getElementById('m-edu').value;
+    const age = document.getElementById('m-age').value;
+    const category = document.getElementById('m-category').value; // New Field
+
+    if (!name || !edu || !currentMentorPhoto) return alert("Complete all fields!");
+
+    const mentors = JSON.parse(localStorage.getItem('joboMentors')) || [];
+    mentors.push({ 
+        name, 
+        edu, 
+        age, 
+        category, // Saved to database
+        img: currentMentorPhoto,
+        id: Date.now() 
+    });
+
+    localStorage.setItem('joboMentors', JSON.stringify(mentors));
+    alert("Mentor Deployed to Social Feed!");
+    location.reload();
+}
+
+function setAdminView(viewId, clickedElement) {
+    // 1. Hide all sections
+    document.querySelectorAll('.view').forEach(view => {
+        view.style.display = 'none';
+    });
+
+    // 2. Show the one we want
+    const activeView = document.getElementById(viewId);
+    if (activeView) activeView.style.display = 'block';
+
+    // 3. Highlight the button in the sidebar
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    if (clickedElement) clickedElement.classList.add('active');
+    
+    // 4. Auto-load data if needed
+    if (viewId === 'mentor-mgmt') displayAdminMentors();
+    if (viewId === 'inbox') loadRequests();
+}
+
+function sendGlobalAlert() {
+    const text = document.getElementById('broadcast-msg').value;
+    const type = document.getElementById('broadcast-type').value;
+
+    if(!text) {
+        alert("CRITICAL_ERROR: Transmission content cannot be empty.");
+        return;
+    }
+
+    // Saving to localStorage for index.html to pick up
+    const alertData = { 
+        message: text, 
+        style: type, 
+        timestamp: new Date().toLocaleTimeString(),
+        id: Date.now()
+    };
+    
+    localStorage.setItem('jobo_global_alert', JSON.stringify(alertData));
+    
+    // Satisfying feedback
+    const btn = document.querySelector('.broadcast-btn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "📡 TRANSMITTING...";
+    btn.style.background = "#00ff00";
+
+    setTimeout(() => {
+        alert("SUCCESS: Signal Broadcasted to Network.");
+        btn.innerHTML = originalText;
+        btn.style.background = "var(--primary)";
+        document.getElementById('broadcast-msg').value = ""; 
+    }, 1500);
+}
