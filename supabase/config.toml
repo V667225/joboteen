@@ -1,0 +1,10 @@
+project_id = "replace-with-your-supabase-project-id"
+
+[functions.health]
+verify_jwt = false
+
+[functions.mentor-request]
+verify_jwt = true
+
+[functions.save-profile]
+verify_jwt = true
