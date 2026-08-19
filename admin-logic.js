@@ -1,21 +1,14 @@
 // JoboTeen admin access gate.
-// This is suitable for the current static/demo architecture only; production admin authentication must be server-side.
-if(sessionStorage.getItem('joboTeenAdmin')!=='1'){
-  window.location.replace('index.html');
-}
+// Current static architecture uses a client-side gate. Production authentication should be server-side.
+if(sessionStorage.getItem('joboTeenAdmin')!=='1') window.location.replace('index.html');
 
 let currentMentorPhoto = ""; 
-
-// Navigation: Switches views and highlights sidebar
-function setAdminView(id, el) {
-    document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
-    const targetSection = document.getElementById(id);
-    if (targetSection) {
-        targetSection.style.display = 'block';
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-        if (el) el.classList.add('active');
-    }
-}
-
-// Keep the existing admin logic available below this access gate.
-// The legacy dashboard functions are loaded from the rest of this file in the repository history.
+function setAdminView(id, el) { document.querySelectorAll('.view').forEach(v=>v.style.display='none'); const targetSection=document.getElementById(id); if(targetSection) targetSection.style.display='block'; document.querySelectorAll('.nav-item').forEach(item=>item.classList.remove('active')); if(el) el.classList.add('active'); if(id==='mentor-mgmt'||id==='overview') displayAdminMentors(); if(id==='inbox') loadRequests(); }
+function previewImage(input){if(input.files&&input.files[0]){const reader=new FileReader();reader.onload=e=>{const preview=document.getElementById('photo-preview');preview.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;border-radius:12px;object-fit:cover;">`;currentMentorPhoto=e.target.result};reader.readAsDataURL(input.files[0])}}
+function registerMentor(){const name=document.getElementById('m-name').value;const edu=document.getElementById('m-edu').value;const age=document.getElementById('m-age').value;const category=document.getElementById('m-category')?.value;if(!name||!edu||!currentMentorPhoto)return alert('Complete all fields!');const mentors=JSON.parse(localStorage.getItem('joboMentors'))||[];mentors.push({name,edu,age,category,img:currentMentorPhoto,id:Date.now()});localStorage.setItem('joboMentors',JSON.stringify(mentors));alert('Mentor added successfully.');location.reload()}
+function displayAdminMentors(){const list=document.getElementById('admin-mentor-list');if(!list)return;const mentors=JSON.parse(localStorage.getItem('joboMentors'))||[];if(mentors.length===0){list.innerHTML="<p style='color:#64748b'>No mentors registered yet.</p>";return}list.innerHTML='';mentors.forEach((m,index)=>{const item=document.createElement('div');item.className='request-card';item.style.display='flex';item.style.justifyContent='space-between';item.innerHTML=`<span><strong>${m.name}</strong> (${m.edu})</span><button class="btn-outline" style="border-color:#ff4444;color:#ff4444;width:auto" onclick="deleteMentor(${index})">Remove</button>`;list.appendChild(item)})}
+function deleteMentor(index){if(confirm('Are you sure you want to remove this mentor?')){let mentors=JSON.parse(localStorage.getItem('joboMentors'))||[];mentors.splice(index,1);localStorage.setItem('joboMentors',JSON.stringify(mentors));displayAdminMentors()}}
+function loadRequests(){const list=document.getElementById('admin-request-list');if(!list)return;const requests=JSON.parse(localStorage.getItem('mentorRequests'))||[];list.innerHTML=requests.length===0?'<p>No pending requests.</p>':'';requests.forEach(req=>{const div=document.createElement('div');div.className='request-card';div.innerHTML=`<span class="status-badge">${req.urgency||req.priority||'General'}</span><strong>From: ${req.name||req.userName||'Anonymous teen'}</strong><br><p>${req.message||req.problem||''}</p><small>${req.time||''}</small>`;list.prepend(div)})}
+function sendGlobalAlert(){const text=document.getElementById('broadcast-msg').value;const type=document.getElementById('broadcast-type').value;if(!text)return alert('Transmission content cannot be empty.');localStorage.setItem('jobo_global_alert',JSON.stringify({message:text,style:type,timestamp:new Date().toLocaleTimeString(),id:Date.now()}));alert('Signal broadcasted.');document.getElementById('broadcast-msg').value=''}
+function toggleSidebar(){document.querySelector('.sidebar')?.classList.toggle('collapsed')}
+window.onload=()=>{displayAdminMentors();setInterval(loadRequests,5000)};
