@@ -6,8 +6,12 @@
     <title>Joboteen Guide </title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+<meta name="theme-color" content="#07111f"><meta name="description" content="JoboTeen — premium guidance, education, mentorship and youth development."><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icons/icon-192.svg">
 </head>
 <body>
+<button class="mobile-menu-toggle" type="button" aria-label="Open navigation" onclick="document.getElementById('main-sidebar').classList.toggle('mobile-open')">☰</button><div class="mobile-backdrop" onclick="document.getElementById('main-sidebar').classList.remove('mobile-open')"></div>
+
 
     <div id="login-screen">
         <div class="login-box">
@@ -520,5 +524,7 @@ By noon, more classmates appeared, carrying gloves, trash bags, and even snacks 
         </div>
     </div>
 </div>
+
+<script>if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));</script>
 </body>
 </html>
