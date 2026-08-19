@@ -53,16 +53,29 @@ Learn from the experience
 - Vanilla JavaScript / ES6+
 - CSS animations and transforms
 - Font Awesome / BoxIcons
+- **Vite 7 build tooling**
+- **Installable PWA with manifest + service worker**
+- **Vercel-ready production build**
 
 ## 🚀 Run locally
 
 ```bash
 git clone https://github.com/vince551/joboteen.git
 cd joboteen
-npx serve .
+npm install
+npm run dev
 ```
 
-Use a modern browser and serve the project over HTTP so asset/module loading behaves consistently.
+For a production build:
+
+```bash
+npm run build
+npm run preview
+```
+
+## 📱 PWA
+
+JoboTeen is designed as an installable Progressive Web App with a standalone mobile experience, app icons, responsive navigation and offline caching. Serve it over HTTPS (or localhost during development) for browser installation support.
 
 ## ♿ Product quality goals
 
