@@ -1,0 +1,82 @@
+name: JoboTeen Premium Modernization
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  modernize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build modern PWA foundation
+        shell: bash
+        run: |
+          cat > package.json <<'EOF'
+          {"name":"joboteen","private":true,"version":"2.0.0","type":"module","scripts":{"dev":"vite","build":"vite build","preview":"vite preview"},"devDependencies":{"vite":"^7.1.2"}}
+          EOF
+          cat > vite.config.js <<'EOF'
+          import { defineConfig } from 'vite';
+          export default defineConfig({server:{host:true,port:5173},build:{target:'es2022'}});
+          EOF
+          cat > vercel.json <<'EOF'
+          {"buildCommand":"npm run build","outputDirectory":"dist","framework":"vite"}
+          EOF
+          mkdir -p icons
+          cat > manifest.webmanifest <<'EOF'
+          {"name":"JoboTeen","short_name":"JoboTeen","description":"Premium guidance, education, mentorship and youth development platform.","start_url":"./","scope":"./","display":"standalone","display_override":["window-controls-overlay","standalone"],"orientation":"portrait-primary","theme_color":"#07111f","background_color":"#050914","icons":[{"src":"icons/icon-192.svg","sizes":"192x192","type":"image/svg+xml","purpose":"any maskable"},{"src":"icons/icon-512.svg","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"}]}
+          EOF
+          cat > icons/icon-192.svg <<'EOF'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#35e8ff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="192" height="192" rx="42" fill="#07111f"/><rect x="12" y="12" width="168" height="168" rx="36" fill="url(#g)"/><rect x="28" y="28" width="136" height="136" rx="28" fill="#07111f"/><text x="96" y="126" text-anchor="middle" font-family="Arial,sans-serif" font-size="100" font-weight="900" fill="url(#g)">J</text></svg>
+          EOF
+          cp icons/icon-192.svg icons/icon-512.svg
+          cat > sw.js <<'EOF'
+          const CACHE='joboteen-v2';
+          const SHELL=['./','./index.html','./style.css','./script.js','./manifest.webmanifest','./offline.html'];
+          self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())));
+          self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+          self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./offline.html'))))});
+          EOF
+          cat > offline.html <<'EOF'
+          <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07111f"><title>JoboTeen — Offline</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#050914;color:#fff;font:16px system-ui}.card{max-width:420px;margin:24px;padding:32px;border:1px solid #20304a;border-radius:24px;background:#0b1220;text-align:center}.logo{font-size:56px;font-weight:900;color:#35e8ff}</style></head><body><main class="card"><div class="logo">J.</div><h1>You’re offline</h1><p>Cached JoboTeen content remains available where possible.</p></main></body></html>
+          EOF
+      - name: Upgrade HTML shell
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html'); s=p.read_text()
+          head='''\n<meta name="theme-color" content="#07111f"><meta name="description" content="JoboTeen — premium guidance, education, mentorship and youth development."><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icons/icon-192.svg">\n'''
+          if 'manifest.webmanifest' not in s:s=s.replace('</head>',head+'</head>',1)
+          nav='''\n<button class="mobile-menu-toggle" type="button" aria-label="Open navigation" onclick="document.getElementById('main-sidebar').classList.toggle('mobile-open')">☰</button><div class="mobile-backdrop" onclick="document.getElementById('main-sidebar').classList.remove('mobile-open')"></div>\n'''
+          if 'mobile-menu-toggle' not in s:s=s.replace('<body>','<body>'+nav,1)
+          sw='''\n<script>if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));</script>\n'''
+          if 'serviceWorker.register' not in s:s=s.replace('</body>',sw+'</body>',1)
+          p.write_text(s)
+          PY
+      - name: Add premium mobile-first styling
+        shell: bash
+        run: |
+          cat >> style.css <<'EOF'
+          /* JoboTeen 2.0 responsive design system */
+          :root{--jt-bg:#050914;--jt-line:rgba(148,163,184,.14);--jt-cyan:#35e8ff;--jt-violet:#8b5cf6;--jt-muted:#94a3b8;--jt-radius:22px;--jt-shadow:0 24px 70px rgba(0,0,0,.38)}
+          *{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--jt-bg)}body{min-width:320px;overflow-x:hidden;background:radial-gradient(circle at 80% 0%,rgba(53,232,255,.08),transparent 28%),radial-gradient(circle at 20% 100%,rgba(139,92,246,.09),transparent 30%),var(--jt-bg);-webkit-font-smoothing:antialiased}button,input,textarea,select{font:inherit}
+          #main-app{min-height:100dvh;height:auto;display:flex}.sidebar{position:fixed!important;inset:0 auto 0 0;width:270px;z-index:1000;display:flex;flex-direction:column;background:rgba(7,14,27,.88)!important;border-right:1px solid var(--jt-line)!important;backdrop-filter:blur(24px)}.content{margin-left:270px;width:calc(100% - 270px);min-height:100dvh;padding:clamp(24px,4vw,56px);overflow-x:hidden}
+          .sidebar-logo{padding:28px 24px;font-size:1.15rem;font-weight:900;letter-spacing:.12em}.sidebar-logo .logo-icon{display:inline-grid;place-items:center;width:38px;height:38px;margin-right:10px;border-radius:12px;background:linear-gradient(135deg,var(--jt-cyan),var(--jt-violet));color:#06101b}.nav-group{padding:0 8px}.nav-item{display:flex;align-items:center;gap:12px;min-height:48px;margin:6px 8px;padding:11px 14px;border:1px solid transparent}
+          .glass-card{background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));border:1px solid var(--jt-line);border-radius:var(--jt-radius);box-shadow:var(--jt-shadow);backdrop-filter:blur(18px)}.view-header{max-width:1000px;margin-bottom:28px}.view-header h1{font-size:clamp(2rem,5vw,4.3rem);line-height:1.02;margin:0 0 12px;letter-spacing:-.045em}.subtitle{color:var(--jt-muted);line-height:1.7}
+          .edu-grid,.mentor-explore-grid,.profile-container,.profile-details-grid{width:100%;display:grid;gap:20px}.edu-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}.profile-container{grid-template-columns:minmax(240px,.7fr) minmax(0,1.8fr)}.profile-details-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.btn-shine{min-height:46px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,var(--jt-cyan));box-shadow:0 12px 30px rgba(53,232,255,.12);transition:transform .2s,box-shadow .2s}.btn-shine:hover{transform:translateY(-2px);box-shadow:0 16px 38px rgba(53,232,255,.2)}.login-box{width:min(92vw,470px);padding:clamp(24px,6vw,48px);border:1px solid var(--jt-line);background:rgba(9,15,28,.78);backdrop-filter:blur(24px);box-shadow:var(--jt-shadow)}.login-box input{width:100%;max-width:100%;min-height:48px;padding:13px 15px;box-sizing:border-box}
+          .mobile-menu-toggle{display:none}.mobile-backdrop{display:none}
+          @media(max-width:900px){.sidebar{transform:translateX(-105%);width:min(84vw,310px);transition:transform .28s ease;box-shadow:20px 0 60px rgba(0,0,0,.45)}.sidebar.mobile-open{transform:translateX(0)}.sidebar.mobile-open~.mobile-backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(3px);z-index:999}.content{margin-left:0;width:100%;padding:76px 18px 92px}.mobile-menu-toggle{display:grid;place-items:center;position:fixed;top:16px;left:16px;width:48px;height:48px;border-radius:15px;border:1px solid var(--jt-line);background:rgba(10,18,32,.84);color:#fff;z-index:1100;box-shadow:0 12px 35px rgba(0,0,0,.3);cursor:pointer}.profile-container,.profile-details-grid,.edu-grid,.mentor-explore-grid{grid-template-columns:1fr}.view{width:100%!important;padding:0!important}.neon-boost-container,.edu-main-card,.edu-card,.story-editor,.profile-sidebar{padding:18px!important}}
+          @media(max-width:560px){.content{padding-left:14px;padding-right:14px}.view-header{margin-bottom:20px}.view-header h1{font-size:clamp(1.85rem,10vw,2.8rem)}.glass-card{border-radius:18px}.nav-item{min-height:52px}.small-btn{min-height:42px;padding:9px 16px!important}.mentor-stories{overflow-x:auto;justify-content:flex-start;padding-bottom:6px;scrollbar-width:none}.mentor-stories::-webkit-scrollbar{display:none}.timer-controls{display:flex;flex-wrap:wrap;gap:8px}.timer-controls .btn-shine{flex:1;min-width:110px}iframe{max-width:100%}}
+          @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}@media(display-mode:standalone){body{padding-top:env(safe-area-inset-top)}}
+          EOF
+      - name: Commit modernization
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .
+          git diff --cached --quiet && exit 0
+          git commit -m 'feat: premium mobile-first Vite PWA modernization'
+          git push
