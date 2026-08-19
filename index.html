@@ -3,105 +3,73 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#07111f">
-  <meta name="description" content="JoboTeen — a safe, practical space where teenagers can find guidance, advice, learning support and mentorship.">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="description" content="JoboTeen — a welcoming mentorship and guidance space for teenagers. Explore advice, learning support, life skills and career guidance without forced sign-in.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/icon-192.svg">
   <link rel="stylesheet" href="style.css">
-  <title>JoboTeen — Guidance for Teens</title>
+  <link rel="stylesheet" href="premium.css">
+  <title>JoboTeen — Mentorship for Growing Minds</title>
 </head>
 <body>
-<button class="mobile-menu-toggle" type="button" aria-label="Open navigation" onclick="document.getElementById('main-sidebar').classList.toggle('mobile-open')">☰</button><div class="mobile-backdrop" onclick="document.getElementById('main-sidebar').classList.remove('mobile-open')"></div>
-
 <div class="site-bg"></div>
-
 <header class="topbar">
   <a class="brand" href="#home" aria-label="JoboTeen home"><span class="brand-mark">J</span><span>Jobo<span>Teen</span></span></a>
   <nav class="desktop-nav" aria-label="Primary navigation">
     <a href="#advice">Get Advice</a><a href="#learn">Learn</a><a href="#mentors">Mentors</a><a href="#mind">Mind Library</a>
   </nav>
-  <div class="top-actions"><button class="ghost-btn" onclick="openAdminLogin()">Admin</button><button class="menu-btn" onclick="toggleMobileNav()" aria-label="Open menu">☰</button></div>
+  <div class="top-actions"><button class="ghost-btn" id="install-app-btn" hidden onclick="installPWA()">Install app</button><button class="ghost-btn" onclick="openAdminLogin()">Admin</button><button class="menu-btn" onclick="toggleMobileNav()" aria-label="Open menu">☰</button></div>
 </header>
-<div id="mobile-nav" class="mobile-nav"><a href="#advice" onclick="closeMobileNav()">Get Advice</a><a href="#learn" onclick="closeMobileNav()">Learn</a><a href="#mentors" onclick="closeMobileNav()">Mentors</a><a href="#mind" onclick="closeMobileNav()">Mind Library</a><button onclick="openAdminLogin();closeMobileNav()">Admin access</button></div>
-
+<div id="mobile-nav" class="mobile-nav"><a href="#advice" onclick="closeMobileNav()">Get Advice</a><a href="#learn" onclick="closeMobileNav()">Learn</a><a href="#mentors" onclick="closeMobileNav()">Mentors</a><a href="#mind" onclick="closeMobileNav()">Mind Library</a><button id="mobile-install-btn" hidden onclick="installPWA();closeMobileNav()">Install JoboTeen</button><button onclick="openAdminLogin();closeMobileNav()">Admin access</button></div>
 <main>
 <section id="home" class="hero section-shell">
   <div class="hero-copy">
-    <div class="eyebrow"><span class="live-dot"></span> A safe space for growing minds</div>
+    <div class="eyebrow"><span class="live-dot"></span> A welcoming space for growing minds</div>
     <h1>You don't have to figure out <em>everything</em> alone.</h1>
-    <p>JoboTeen helps teenagers navigate school, friendships, family pressure, confidence, career choices and everyday challenges — with practical guidance, stories and people who can help.</p>
-    <div class="hero-actions"><a class="primary-btn" href="#advice">I need guidance <span>→</span></a><a class="secondary-btn" href="#learn">Explore resources</a></div>
-    <div class="trust-row"><span>✓ Private by design</span><span>✓ Teen-friendly</span><span>✓ No forced sign-in</span></div>
+    <p>JoboTeen connects teenagers with practical guidance, mentorship and resources for school, friendships, family pressure, confidence, wellbeing and future choices — without making you feel judged.</p>
+    <div class="hero-actions"><a class="primary-btn" href="#advice">I need guidance <span>→</span></a><a class="secondary-btn" href="#mentors">Meet the mentorship hub</a></div>
+    <div class="trust-row"><span>✓ No forced sign-in</span><span>✓ Teen-friendly</span><span>✓ Learn at your pace</span></div>
   </div>
   <div class="hero-panel glass-card">
-    <div class="panel-top"><span>JOBOTEEN GUIDE</span><span class="status">● ONLINE</span></div>
-    <h3>What are you dealing with today?</h3>
+    <div class="panel-top"><span>JOBOTEEN MENTORSHIP HUB</span><span class="status">● HERE FOR YOU</span></div>
+    <h3>What's on your mind today?</h3>
     <div class="quick-grid">
-      <button onclick="chooseTopic('School & studies')">📚<b>School</b><small>Study pressure & focus</small></button>
-      <button onclick="chooseTopic('Friends & relationships')">💬<b>Relationships</b><small>Friends, trust & boundaries</small></button>
-      <button onclick="chooseTopic('Mental wellbeing')">🧠<b>My wellbeing</b><small>Stress & confidence</small></button>
-      <button onclick="chooseTopic('Career & future')">🚀<b>My future</b><small>Careers & purpose</small></button>
+      <button onclick="chooseTopic('School & studies')">📚<b>School & studies</b><small>Pressure, focus & performance</small></button>
+      <button onclick="chooseTopic('Friends & relationships')">💬<b>Friends & relationships</b><small>Trust, boundaries & conflict</small></button>
+      <button onclick="chooseTopic('Mental wellbeing')">🧠<b>My wellbeing</b><small>Stress, confidence & emotions</small></button>
+      <button onclick="chooseTopic('Career & future')">🚀<b>My future</b><small>Interests, skills & careers</small></button>
     </div>
   </div>
 </section>
-
+<section class="section-shell section" aria-label="Why JoboTeen">
+  <div class="section-heading"><div><span class="eyebrow">WHY MENTORSHIP MATTERS</span><h2>A place to ask, learn and grow.</h2></div><p>Sometimes you don't need someone to solve everything. You need someone to help you see the next step clearly.</p></div>
+  <div class="resource-grid">
+    <article class="resource-card"><span>🤝</span><small>BE HEARD</small><h3>Talk without the pressure.</h3><p>Start with what you are comfortable sharing and take the conversation at your own pace.</p></article>
+    <article class="resource-card"><span>🧭</span><small>GET DIRECTION</small><h3>Find your next step.</h3><p>Turn a confusing situation into smaller, practical decisions you can actually act on.</p></article>
+    <article class="resource-card"><span>🌱</span><small>BUILD SKILLS</small><h3>Grow beyond one problem.</h3><p>Learn communication, study habits, confidence, boundaries and decision-making.</p></article>
+    <article class="resource-card"><span>✨</span><small>DISCOVER YOURSELF</small><h3>There is more ahead.</h3><p>Your current challenge does not have to define your future, your potential or your story.</p></article>
+  </div>
+</section>
 <section id="advice" class="section-shell section">
   <div class="section-heading"><div><span class="eyebrow">YOUR SPACE</span><h2>Talk about what's on your mind.</h2></div><p>You can explore without creating an account. Save a profile only if you want a more personal experience.</p></div>
   <div class="advice-layout">
-    <div class="glass-card advice-card">
-      <div class="card-kicker">PRIVATE GUIDANCE REQUEST</div>
-      <h3>Tell us what you need help with.</h3>
-      <p class="muted">Keep it as general as you like. Don't share passwords, private addresses or anything you would not want stored on this device.</p>
-      <div class="topic-pills" id="topic-pills"><button onclick="setAdviceTopic(this,'School & studies')">School</button><button onclick="setAdviceTopic(this,'Friendships')">Friendships</button><button onclick="setAdviceTopic(this,'Family')">Family</button><button onclick="setAdviceTopic(this,'Confidence')">Confidence</button><button onclick="setAdviceTopic(this,'Career')">Career</button><button onclick="setAdviceTopic(this,'Other')">Other</button></div>
-      <textarea id="advice-text" rows="6" placeholder="What's happening? What would you like to understand or change?"></textarea>
-      <div class="form-row"><select id="advice-urgency"><option>I'd like general guidance</option><option>I need help soon</option><option>This feels urgent</option></select><button class="primary-btn" onclick="submitAdvice()">Ask for guidance →</button></div>
-      <div id="advice-result" class="result-box" hidden></div>
-    </div>
+    <div class="glass-card advice-card"><div class="card-kicker">PRIVATE GUIDANCE REQUEST</div><h3>Tell us what you need help with.</h3><p class="muted">Keep it as general as you like. Never share passwords, private addresses or information you would not want stored on this device.</p><div class="topic-pills" id="topic-pills"><button onclick="setAdviceTopic(this,'School & studies')">School</button><button onclick="setAdviceTopic(this,'Friendships')">Friendships</button><button onclick="setAdviceTopic(this,'Family')">Family</button><button onclick="setAdviceTopic(this,'Confidence')">Confidence</button><button onclick="setAdviceTopic(this,'Career')">Career</button><button onclick="setAdviceTopic(this,'Other')">Other</button></div><textarea id="advice-text" rows="6" placeholder="What's happening? What would you like to understand or change?"></textarea><div class="form-row"><select id="advice-urgency"><option>I'd like general guidance</option><option>I need help soon</option><option>This feels urgent</option></select><button class="primary-btn" onclick="submitAdvice()">Ask for guidance →</button></div><div id="advice-result" class="result-box" hidden></div></div>
     <aside class="glass-card safety-card"><span class="safety-icon">🛡️</span><h3>A space built around safety</h3><ul><li>Start anonymously if you prefer.</li><li>Guidance is educational, not a replacement for professional or emergency care.</li><li>If someone is in immediate danger, contact a trusted adult or appropriate emergency service.</li></ul><button class="text-btn" onclick="openProfile()">Create optional profile →</button></aside>
   </div>
 </section>
-
-<section id="learn" class="section-shell section">
-  <div class="section-heading"><div><span class="eyebrow">LEARNING HUB</span><h2>Tools that make growing easier.</h2></div><p>Practical resources for school, life skills and building a stronger future.</p></div>
-  <div class="resource-grid">
-    <article class="resource-card featured"><span>🎯</span><div><small>STUDY SKILLS</small><h3>Focus better, not just longer.</h3><p>Pomodoro, active recall, spaced repetition and simple study planning.</p><button onclick="openResource('study')">Explore study tools →</button></div></article>
-    <article class="resource-card"><span>📝</span><small>SUBJECT HELP</small><h3>Make difficult subjects clearer.</h3><p>Break a hard topic into manageable steps and questions.</p><button onclick="openResource('subjects')">Get started →</button></article>
-    <article class="resource-card"><span>🌱</span><small>LIFE SKILLS</small><h3>Build confidence and resilience.</h3><p>Communication, boundaries, decision-making and self-belief.</p><button onclick="openResource('life')">Learn more →</button></article>
-    <article class="resource-card"><span>🧭</span><small>CAREER PATHWAYS</small><h3>Explore your future.</h3><p>Discover interests, skills and possible career directions.</p><button onclick="openResource('career')">Explore →</button></article>
-  </div>
-</section>
-
-<section id="mentors" class="section-shell section dark-section">
-  <div class="section-heading"><div><span class="eyebrow">MENTORSHIP</span><h2>Learn from someone who's been there.</h2></div><p>Mentorship should feel approachable, respectful and focused on your goals.</p></div>
-  <div class="mentor-grid" id="mentor-grid">
-    <article class="mentor-card glass-card"><div class="avatar gradient-a">A</div><div><span class="mentor-tag">EDUCATION</span><h3>Academic Guidance</h3><p>Study habits, school pressure and planning your next step.</p><button onclick="openMentor('Academic Guidance')">Ask for guidance →</button></div></article>
-    <article class="mentor-card glass-card"><div class="avatar gradient-b">C</div><div><span class="mentor-tag">CAREER</span><h3>Career Discovery</h3><p>Understand your strengths and connect them to possible careers.</p><button onclick="openMentor('Career Discovery')">Ask for guidance →</button></div></article>
-    <article class="mentor-card glass-card"><div class="avatar gradient-c">W</div><div><span class="mentor-tag">WELLBEING</span><h3>Life & Confidence</h3><p>Talk through confidence, communication and everyday challenges.</p><button onclick="openMentor('Life & Confidence')">Ask for guidance →</button></div></article>
-  </div>
-</section>
-
-<section id="mind" class="section-shell section">
-  <div class="section-heading"><div><span class="eyebrow">MIND LIBRARY</span><h2>Stories that help you see things differently.</h2></div><p>Interactive stories turn everyday situations into opportunities to reflect, choose and learn.</p></div>
-  <div class="story-grid">
-    <article class="story-tile dream"><span>PERSEVERANCE</span><h3>The Dreamer</h3><p>When people laugh at your passion, do you keep going?</p><button onclick="readStory('The Dreamer')">Read story →</button></article>
-    <article class="story-tile courage"><span>COURAGE</span><h3>The Choice</h3><p>A difficult decision can reveal what you value most.</p><button onclick="readStory('The Choice')">Read story →</button></article>
-    <article class="story-tile empathy"><span>EMPATHY</span><h3>Behind the Message</h3><p>Before reacting, what else might be happening?</p><button onclick="readStory('Behind the Message')">Read story →</button></article>
-  </div>
-</section>
-
+<section id="learn" class="section-shell section"><div class="section-heading"><div><span class="eyebrow">LEARNING HUB</span><h2>Tools that make growing easier.</h2></div><p>Practical resources for school, life skills and building a stronger future.</p></div><div class="resource-grid"><article class="resource-card featured"><span>🎯</span><div><small>STUDY SKILLS</small><h3>Focus better, not just longer.</h3><p>Pomodoro, active recall, spaced repetition and simple study planning.</p><button onclick="openResource('study')">Explore study tools →</button></div></article><article class="resource-card"><span>📝</span><small>SUBJECT HELP</small><h3>Make difficult subjects clearer.</h3><p>Break a hard topic into manageable steps and questions.</p><button onclick="openResource('subjects')">Get started →</button></article><article class="resource-card"><span>🌱</span><small>LIFE SKILLS</small><h3>Build confidence and resilience.</h3><p>Communication, boundaries, decision-making and self-belief.</p><button onclick="openResource('life')">Learn more →</button></article><article class="resource-card"><span>🧭</span><small>CAREER PATHWAYS</small><h3>Explore your future.</h3><p>Discover interests, skills and possible career directions.</p><button onclick="openResource('career')">Explore →</button></article></div></section>
+<section id="mentors" class="section-shell section dark-section"><div class="section-heading"><div><span class="eyebrow">MENTORSHIP HUB</span><h2>Guidance for the journey ahead.</h2></div><p>Different goals need different kinds of support. Choose a pathway and start the conversation.</p></div><div class="mentor-grid" id="mentor-grid"><article class="mentor-card glass-card"><div class="avatar gradient-a">A</div><div><span class="mentor-tag">EDUCATION</span><h3>Academic Guidance</h3><p>Study habits, school pressure, subject challenges and planning your next step.</p><button onclick="openMentor('Academic Guidance')">Start a conversation →</button></div></article><article class="mentor-card glass-card"><div class="avatar gradient-b">C</div><div><span class="mentor-tag">CAREER</span><h3>Career Discovery</h3><p>Understand your strengths, interests and connect them to possible careers.</p><button onclick="openMentor('Career Discovery')">Start a conversation →</button></div></article><article class="mentor-card glass-card"><div class="avatar gradient-c">W</div><div><span class="mentor-tag">LIFE & WELLBEING</span><h3>Life & Confidence</h3><p>Talk through confidence, communication, boundaries and everyday challenges.</p><button onclick="openMentor('Life & Confidence')">Start a conversation →</button></div></article></div></section>
+<section id="mind" class="section-shell section"><div class="section-heading"><div><span class="eyebrow">MIND LIBRARY</span><h2>Stories that help you see things differently.</h2></div><p>Interactive stories turn everyday situations into opportunities to reflect, choose and learn.</p></div><div class="story-grid"><article class="story-tile dream"><span>PERSEVERANCE</span><h3>The Dreamer</h3><p>When people laugh at your passion, do you keep going?</p><button onclick="readStory('The Dreamer')">Read story →</button></article><article class="story-tile courage"><span>COURAGE</span><h3>The Choice</h3><p>A difficult decision can reveal what you value most.</p><button onclick="readStory('The Choice')">Read story →</button></article><article class="story-tile empathy"><span>EMPATHY</span><h3>Behind the Message</h3><p>Before reacting, what else might be happening?</p><button onclick="readStory('Behind the Message')">Read story →</button></article></div></section>
 <section id="games" class="section-shell section compact-section"><div class="feature-banner glass-card"><div><span class="eyebrow">FUN + LEARNING</span><h2>Give your brain a workout.</h2><p>Try the built-in cognitive games when you want a break that still challenges you.</p></div><div class="game-links"><button onclick="openGame('games/chess.html')">♟ Chess</button><button onclick="openGame('games/s.html')">🔢 Sudoku</button><button onclick="openGame('games/c.html')">⚪ Checkers</button></div></div></section>
-
 <section id="profile" class="section-shell section"><div class="profile-banner glass-card"><div><span class="eyebrow">OPTIONAL PROFILE</span><h2>Make JoboTeen yours.</h2><p>No account is required to get guidance. A local profile simply helps you remember your preferences and progress on this device.</p></div><button class="primary-btn" onclick="openProfile()">Set up my profile →</button></div></section>
 </main>
-
 <footer><div class="footer-brand"><span class="brand-mark">J</span><b>JoboTeen</b><p>Guidance for growing minds.</p></div><div><b>Explore</b><a href="#advice">Advice</a><a href="#learn">Learning</a><a href="#mentors">Mentorship</a></div><div><b>Remember</b><p>You are allowed to ask for help. You are allowed to change your mind. You don't have to have it all figured out.</p></div></footer>
-
 <div id="modal" class="modal" aria-hidden="true"><div class="modal-card"><button class="modal-close" onclick="closeModal()">×</button><div id="modal-content"></div></div></div>
 <div id="toast" class="toast"></div>
-<script src="script.js"></script>
-<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>
+<div id="install-banner" class="install-banner"><div class="install-copy"><strong>Take JoboTeen with you.</strong><small>Install the mentorship hub for a faster, app-like experience.</small></div><button class="install-now" onclick="installPWA()">Install</button><button class="install-close" onclick="dismissInstall()">×</button></div>
+<script src="script.js"></script><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>
 </body></html>
